@@ -1,0 +1,8 @@
+{
+  "name": "backstage-plugin-datacontract-root",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "packageManager": "yarn@3.6.4"
+}

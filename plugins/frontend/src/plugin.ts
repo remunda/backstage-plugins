@@ -12,7 +12,7 @@ export const datacontractPlugin = createPlugin({
   },
 });
 
-export const datacontractPage = datacontractPlugin.provide(
+export const DatacontractPage = datacontractPlugin.provide(
   createRoutableExtension({
     name: "{{ extensionName }}",
     component: () =>

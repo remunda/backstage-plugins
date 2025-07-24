@@ -12,8 +12,9 @@ Yarn workspaces.
 - A custom catalog processor resolves the file reference, validates it against
   the official [DataContract specification](https://github.com/datacontract/datacontract-specification),
   and injects the raw YAML into the entity.
-- The frontend plugin extends the API Docs definition widget to render
-  DataContract content when `spec.type` is `datacontract`.
+- The frontend plugin registers a custom API Docs definition widget
+  (`DataContractDefinitionWidget`) to render DataContract YAML when
+  `spec.type` is `datacontract`.
 - Example backend router at `/ingest` that validates uploaded YAML.
 
 The repository is a Yarn workspaces monorepo written in modern TypeScript.

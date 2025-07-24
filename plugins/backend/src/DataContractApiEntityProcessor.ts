@@ -1,10 +1,12 @@
 import type { Entity } from "@backstage/catalog-model";
 import type { CatalogProcessor } from "@backstage/plugin-catalog-node";
 import Ajv from "ajv";
+import addFormats from "ajv-formats";
 import yaml from "js-yaml";
 import dcSchema from "../schemas/datacontract.schema.json";
 
-const ajv = new Ajv({ allErrors: true });
+const ajv = new Ajv({ allErrors: true, strict: false });
+addFormats(ajv);
 const validate = ajv.compile(dcSchema);
 
 /**

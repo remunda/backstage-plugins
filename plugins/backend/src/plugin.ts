@@ -1,10 +1,10 @@
 import {
-  coreServices,
-  createBackendPlugin,
-} from '@backstage/backend-plugin-api';
-import { createRouter } from './router';
-import { catalogServiceRef } from '@backstage/plugin-catalog-node';
-import { createTodoListService } from './services/TodoListService';
+	coreServices,
+	createBackendPlugin,
+} from "@backstage/backend-plugin-api";
+import { catalogServiceRef } from "@backstage/plugin-catalog-node";
+import { createRouter } from "./router";
+import { createTodoListService } from "./services/TodoListService";
 
 /**
  * datacontract backend plugin
@@ -12,28 +12,28 @@ import { createTodoListService } from './services/TodoListService';
  * @public
  */
 export const datacontractBackendPlugin = createBackendPlugin({
-  pluginId: 'backstage-plugin-datacontract-backend',
-  register(env) {
-    env.registerInit({
-      deps: {
-        logger: coreServices.logger,
-        httpAuth: coreServices.httpAuth,
-        httpRouter: coreServices.httpRouter,
-        catalog: catalogServiceRef,
-      },
-      async init({ logger, httpAuth, httpRouter, catalog }) {
-        const todoListService = await createTodoListService({
-          logger,
-          catalog,
-        });
+	pluginId: "backstage-plugin-datacontract-backend",
+	register(env) {
+		env.registerInit({
+			deps: {
+				logger: coreServices.logger,
+				httpAuth: coreServices.httpAuth,
+				httpRouter: coreServices.httpRouter,
+				catalog: catalogServiceRef,
+			},
+			async init({ logger, httpAuth, httpRouter, catalog }) {
+				const todoListService = await createTodoListService({
+					logger,
+					catalog,
+				});
 
-        httpRouter.use(
-          await createRouter({
-            httpAuth,
-            todoListService,
-          }),
-        );
-      },
-    });
-  },
+				httpRouter.use(
+					await createRouter({
+						httpAuth,
+						todoListService,
+					}),
+				);
+			},
+		});
+	},
 });

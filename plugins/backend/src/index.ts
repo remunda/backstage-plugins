@@ -1,1 +1,1 @@
-export { datacontract as default } from './plugin';
+export { datacontract as default } from "./plugin";

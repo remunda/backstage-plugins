@@ -1,1 +1,4 @@
-export { datacontractPlugin, DatacontractPage as datacontractPage } from "./plugin";
+export {
+	DatacontractPage as datacontractPage,
+	datacontractPlugin,
+} from "./plugin";

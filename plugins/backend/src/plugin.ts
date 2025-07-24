@@ -3,8 +3,6 @@ import {
 	createBackendPlugin,
 } from "@backstage/backend-plugin-api";
 import { catalogServiceRef } from "@backstage/plugin-catalog-node";
-import { createRouter } from "./router";
-import { createTodoListService } from "./services/TodoListService";
 
 /**
  * datacontract backend plugin
@@ -21,17 +19,9 @@ export const datacontractBackendPlugin = createBackendPlugin({
 				httpRouter: coreServices.httpRouter,
 				catalog: catalogServiceRef,
 			},
-			async init({ logger, httpAuth, httpRouter, catalog }) {
-				const todoListService = await createTodoListService({
-					logger,
-					catalog,
-				});
-
-				httpRouter.use(
-					await createRouter({
-						httpAuth,
-						todoListService,
-					}),
+			async init({ logger }) {
+				logger.info(
+					"Initializing backstage-plugin-datacontract-backend plugin",
 				);
 			},
 		});

@@ -1,4 +1,4 @@
-const rootConfig = require("../../node_modules/@backstage/cli/config/jest");
+const rootConfig = require("@backstage/cli/config/jest");
 
 module.exports = {
 	...rootConfig,

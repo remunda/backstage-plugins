@@ -1,5 +1,5 @@
 {
-	"name": "backstage-plugin-datacontract-backend",
+	"name": "@remunda/backstage-plugin-datacontract-backend",
 	"main": "src/index.ts",
 	"types": "src/index.ts",
 	"publishConfig": {

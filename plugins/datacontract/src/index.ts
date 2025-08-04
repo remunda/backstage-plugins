@@ -1,1 +1,5 @@
-export { datacontractPlugin, getApiDocsConfigFactory } from "./plugin";
+export {
+	DataContractPage,
+	datacontractPlugin,
+	//getApiDocsConfigFactory,
+} from "./plugin";

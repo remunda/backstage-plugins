@@ -1,3 +1,4 @@
+import type { LoggerService } from "@backstage/backend-plugin-api";
 import type { Entity } from "@backstage/catalog-model";
 import type { CatalogProcessor } from "@backstage/plugin-catalog-node";
 import Ajv from "ajv";
@@ -12,19 +13,37 @@ const validate = ajv.compile(dcSchema);
  * in API entities with type `datacontract`.
  */
 export class DataContractProcessor implements CatalogProcessor {
+	logger: LoggerService;
+
+	constructor(logger: LoggerService) {
+		this.logger = logger;
+		this.logger.info("DataContractProcessor initialized");
+	}
+
 	getProcessorName(): string {
 		return "DataContractProcessor";
 	}
 
-	async validateKind?(entity: Entity): Promise<boolean> {
+	async validateEntityKind?(entity: Entity): Promise<boolean> {
 		if (entity.kind !== "API" || entity.spec?.type !== "datacontract") {
+			this.logger.info(
+				`Validating DataContract for entity ${entity.metadata.name}: skipped`,
+			);
 			return false;
 		}
+
+		this.logger.info(
+			`Validating DataContract for entity ${entity.metadata.name}`,
+		);
 
 		const definition = entity.spec.definition;
 		if (definition && typeof definition === "string") {
 			const parsed = yaml.load(definition);
 			const valid = validate(parsed);
+			this.logger.info(
+				`Validating DataContract for entity ${entity.metadata.name}: ${valid}`,
+			);
+
 			if (!valid) {
 				throw new Error(
 					`DataContract validation failed: ${JSON.stringify(validate.errors)}`,

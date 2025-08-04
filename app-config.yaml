@@ -1,0 +1,11 @@
+backend:
+catalog:
+  import:
+    entityFilename: catalog-info.yaml
+    pullRequestBranchName: backstage-integration
+  rules:
+  - allow: [ Component, System, API, Resource, Location ]
+  locations:
+  # Local example data, file locations are relative to the backend process, typically `packages/backend`
+  - type: file
+    target: plugins\datacontract-backend\dev\examples\dc1.yaml

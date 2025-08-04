@@ -37,23 +37,41 @@ backend.add(mockServices.httpAuth.factory());
 
 // TEMPLATE NOTE:
 // Rather than using a real catalog you can use a mock with a fixed set of entities.
-backend.add(
-	catalogServiceMock.factory({
-		entities: [
-			{
-				apiVersion: "backstage.io/v1alpha1",
-				kind: "Component",
-				metadata: {
-					name: "sample",
-					title: "Sample Component",
-				},
-				spec: {
-					type: "service",
-				},
+
+const catalog = catalogServiceMock.factory({
+	entities: [
+		{
+			apiVersion: "backstage.io/v1alpha1",
+			kind: "API",
+			metadata: {
+				name: "datacontract-sample",
+				title: "Data Contract Sample",
 			},
-		],
-	}),
-);
+			spec: {
+				type: "datacontract",
+				definition: `
+            dataContractSpecification: "0.9.0"
+            id: test-contract
+            info:
+              title: Test Data Contract
+              version: "1.0.0"
+              description: A test data contract
+              owner: Test Team
+              contact:
+                name: Test Team
+                email: test@example.com
+            servers:
+              prod:
+                type: bigquery
+                project: test-project
+                dataset: test_dataset
+          `,
+			},
+		},
+	],
+});
+
+backend.add(catalog);
 
 backend.add(import("../src"));
 

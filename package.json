@@ -3,6 +3,9 @@
 	"private": true,
 	"version": "0.0.1",
 	"scripts": {
+		"start:be": "yarn workspace @remunda/backstage-plugin-datacontract-backend start",
+		"start:fe": "yarn workspace @remunda/backstage-plugin-datacontract start",
+		"start": "concurrently \"yarn start:backend\" \"yarn start:frontend\"",
 		"precommit": "yarn biome check --fix && yarn biome lint --write && yarn biome format --fix",
 		"prepare": "husky"
 	},

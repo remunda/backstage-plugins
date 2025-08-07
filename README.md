@@ -23,6 +23,20 @@ The repository is a Yarn workspaces monorepo written in modern TypeScript.
 Run `yarn install` at the repository root to install all dependencies. Each
 package can be built using its `build` script.
 
+### Change Documentation
+
 Significant architectural changes should be documented in `AGENTS.md` so that
 other contributors and AI assistants (OpenAI Codex, GitHub Copilot, Claude) can
 follow the decisions made.
+
+Additionally, all features and bug fixes should be documented as change sets in
+the `.changes/` directory. Each change set should include:
+
+- Clear description of the feature or bug fix
+- Acceptance criteria defining what constitutes completion
+- Validation evidence showing the change works as intended
+- Context for future contributors and maintainers
+
+See `.changes/initial-design.md` as an example of proper change set documentation.
+This practice ensures transparency, traceability, and clear communication of
+development progress.

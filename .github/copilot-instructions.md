@@ -1,0 +1,1 @@
+use instructions in /AGENTS.md as a reference for contributing to this repository.

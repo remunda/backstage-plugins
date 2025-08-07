@@ -2,3 +2,10 @@ node_modules
 .yarn/
 **/dist/
 local-publish/
+dist-types/
+coverage/
+.idea/
+.vscode/
+.DS_Store
+*.log
+*.tmp

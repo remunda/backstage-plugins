@@ -47,6 +47,4 @@ export const DataContractPage = datacontractPlugin.provide(
 			),
 		mountPoint: rootRouteRef,
 	}),
-
-	
 );

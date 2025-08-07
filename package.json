@@ -1,35 +1,35 @@
 {
-  "name": "@remunda/backstage-plugins",
-  "private": true,
-  "version": "0.0.1",
-  "scripts": {
-    "start:be": "yarn workspace @remunda/backstage-plugin-datacontract-backend start",
-    "start:fe": "yarn workspace @remunda/backstage-plugin-datacontract start",
-    "build:be": "yarn workspace @remunda/backstage-plugin-datacontract-backend build",
-    "build:fe": "yarn workspace @remunda/backstage-plugin-datacontract build",
-    "build": "yarn build:be && yarn build:fe",
-    "start": "concurrently \"yarn start:be\" \"yarn start:fe\"",
-    "local-publish": "yarn build && yarn workspace @remunda/backstage-plugin-datacontract pack --out local-publish/datacontract-frontend.tgz && yarn workspace @remunda/backstage-plugin-datacontract-backend pack --out local-publish/datacontract-backend.tgz",
-    "precommit": "yarn biome check --fix && yarn biome lint --write && yarn biome format --fix",
-    "prepare": "husky"
-  },
-  "workspaces": [
-    "packages/*",
-    "plugins/*"
-  ],
-  "packageManager": "yarn@4.9.2",
-  "devDependencies": {
-    "@backstage/cli": "^0.33.1",
-    "@biomejs/biome": "^2.1.2",
-    "concurrently": "^9.2.0",
-    "husky": "^9.1.7",
-    "typescript": "~5.8.0"
-  },
-  "resolutions": {
-    "@types/react": "^18",
-    "@types/react-dom": "^18"
-  },
-  "engines": {
-    "node": "20 || 22"
-  }
+	"name": "@remunda/backstage-plugins",
+	"private": true,
+	"version": "0.0.1",
+	"scripts": {
+		"start:be": "yarn workspace @remunda/backstage-plugin-datacontract-backend start",
+		"start:fe": "yarn workspace @remunda/backstage-plugin-datacontract start",
+		"build:be": "yarn workspace @remunda/backstage-plugin-datacontract-backend build",
+		"build:fe": "yarn workspace @remunda/backstage-plugin-datacontract build",
+		"build": "yarn build:be && yarn build:fe",
+		"start": "concurrently \"yarn start:be\" \"yarn start:fe\"",
+		"local-publish": "yarn build && yarn workspace @remunda/backstage-plugin-datacontract pack --out local-publish/datacontract-frontend.tgz && yarn workspace @remunda/backstage-plugin-datacontract-backend pack --out local-publish/datacontract-backend.tgz",
+		"precommit": "yarn biome check --fix && yarn biome lint --write && yarn biome format --fix",
+		"prepare": "husky"
+	},
+	"workspaces": [
+		"packages/*",
+		"plugins/*"
+	],
+	"packageManager": "yarn@4.9.2",
+	"devDependencies": {
+		"@backstage/cli": "^0.33.1",
+		"@biomejs/biome": "^2.1.2",
+		"concurrently": "^9.2.0",
+		"husky": "^9.1.7",
+		"typescript": "~5.8.0"
+	},
+	"resolutions": {
+		"@types/react": "^18",
+		"@types/react-dom": "^18"
+	},
+	"engines": {
+		"node": "20 || 22"
+	}
 }

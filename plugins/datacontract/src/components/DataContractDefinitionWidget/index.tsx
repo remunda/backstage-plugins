@@ -1,4 +1,4 @@
-import { CodeSnippet } from "@backstage/core-components";
+import { renderDataContractHtml } from "../../utils/htmlRenderer";
 
 export type DataContractDefinitionWidgetProps = {
 	definition: string;
@@ -7,15 +7,15 @@ export type DataContractDefinitionWidgetProps = {
 export const DataContractDefinitionWidget = ({
 	definition,
 }: DataContractDefinitionWidgetProps) => {
+	const htmlContent = renderDataContractHtml(definition);
+
 	return (
-		<>
-			<h1>Data Contract Definition</h1>
-			<CodeSnippet
-				text={definition}
-				language="yaml"
-				showLineNumbers
-				showCopyCodeButton
-			/>
-		</>
+		<div
+			dangerouslySetInnerHTML={{ __html: htmlContent }}
+			style={{
+				// Add some basic styling to ensure TailwindCSS-like classes work
+				fontFamily: "system-ui, -apple-system, sans-serif",
+			}}
+		/>
 	);
 };

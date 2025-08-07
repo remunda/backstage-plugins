@@ -9,7 +9,10 @@
   },
   "backstage": {
     "role": "frontend-plugin",
-    "pluginId": "backstage-plugin-datacontract"
+    "pluginId": "backstage-plugin-datacontract",
+    "pluginPackages": [
+      "@remunda/backstage-plugin-datacontract"
+    ]
   },
   "sideEffects": false,
   "scripts": {

@@ -7760,17 +7760,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@remunda/backstage-plugin-datacontract-root@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "@remunda/backstage-plugin-datacontract-root@workspace:."
-  dependencies:
-    "@backstage/cli": "npm:^0.33.1"
-    "@biomejs/biome": "npm:^2.1.2"
-    husky: "npm:^9.1.7"
-    typescript: "npm:~5.8.0"
-  languageName: unknown
-  linkType: soft
-
 "@remunda/backstage-plugin-datacontract@workspace:plugins/datacontract":
   version: 0.0.0-use.local
   resolution: "@remunda/backstage-plugin-datacontract@workspace:plugins/datacontract"
@@ -7801,6 +7790,18 @@ __metadata:
     typescript: "npm:^5.9.2"
   peerDependencies:
     react: ^16.13.1 || ^17.0.0 || ^18.0.0
+  languageName: unknown
+  linkType: soft
+
+"@remunda/backstage-plugins@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@remunda/backstage-plugins@workspace:."
+  dependencies:
+    "@backstage/cli": "npm:^0.33.1"
+    "@biomejs/biome": "npm:^2.1.2"
+    concurrently: "npm:^9.2.0"
+    husky: "npm:^9.1.7"
+    typescript: "npm:~5.8.0"
   languageName: unknown
   linkType: soft
 
@@ -13552,6 +13553,24 @@ __metadata:
   dependencies:
     source-map: "npm:^0.6.1"
   checksum: 10c0/d30cec83a320d20d7e9482a4d011fa84319a0a8f9107acb632c48493d608be3a2b879608866d9edba2ce304ee52bc798138c26ad16eda6fbe7ec5e7bec99a683
+  languageName: node
+  linkType: hard
+
+"concurrently@npm:^9.2.0":
+  version: 9.2.0
+  resolution: "concurrently@npm:9.2.0"
+  dependencies:
+    chalk: "npm:^4.1.2"
+    lodash: "npm:^4.17.21"
+    rxjs: "npm:^7.8.1"
+    shell-quote: "npm:^1.8.1"
+    supports-color: "npm:^8.1.1"
+    tree-kill: "npm:^1.2.2"
+    yargs: "npm:^17.7.2"
+  bin:
+    conc: dist/bin/concurrently.js
+    concurrently: dist/bin/concurrently.js
+  checksum: 10c0/adbb5c42d9b36d345654187003c73e2e97e600b038729eec8f8fe735e01d543097b44990f0655fba8266753f4a0bef45fec69850a2c66d119dc1eddeb427858c
   languageName: node
   linkType: hard
 
@@ -25573,7 +25592,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^7.5.5":
+"rxjs@npm:^7.5.5, rxjs@npm:^7.8.1":
   version: 7.8.2
   resolution: "rxjs@npm:7.8.2"
   dependencies:
@@ -25963,7 +25982,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shell-quote@npm:^1.7.3, shell-quote@npm:^1.8.3":
+"shell-quote@npm:^1.7.3, shell-quote@npm:^1.8.1, shell-quote@npm:^1.8.3":
   version: 1.8.3
   resolution: "shell-quote@npm:1.8.3"
   checksum: 10c0/bee87c34e1e986cfb4c30846b8e6327d18874f10b535699866f368ade11ea4ee45433d97bf5eada22c4320c27df79c3a6a7eb1bf3ecfc47f2c997d9e5e2672fd
@@ -27500,6 +27519,15 @@ __metadata:
   peerDependencies:
     tslib: 2
   checksum: 10c0/05d8138f43c48589475f1cac516dcc93b1b6123474a9e1c2ddcaefe0c75105aa5fabee5874a2458c4ab78bde9f01a8d54ff560c4e04089b5325de5ff7f57b2ee
+  languageName: node
+  linkType: hard
+
+"tree-kill@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "tree-kill@npm:1.2.2"
+  bin:
+    tree-kill: cli.js
+  checksum: 10c0/7b1b7c7f17608a8f8d20a162e7957ac1ef6cd1636db1aba92f4e072dc31818c2ff0efac1e3d91064ede67ed5dc57c565420531a8134090a12ac10cf792ab14d2
   languageName: node
   linkType: hard
 

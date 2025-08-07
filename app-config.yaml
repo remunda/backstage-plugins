@@ -1,4 +1,9 @@
+app:
+  title: Data Contract Plugion
+  description: A plugin to manage data contracts in Backstage.
+
 backend:
+  baseUrl: http://localhost:7007
 catalog:
   import:
     entityFilename: catalog-info.yaml

@@ -10,6 +10,3 @@ coverage/
 *.log
 *.tmp
 
-# Generated templates
-plugins/datacontract/templates/
-plugins/datacontract/src/utils/templates.ts

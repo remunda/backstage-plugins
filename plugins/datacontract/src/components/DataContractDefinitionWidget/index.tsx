@@ -1,4 +1,4 @@
-import { renderDataContractHtml } from "../../utils/htmlRenderer";
+import { renderDataContract } from "../../templates/htmlRenderer";
 
 export type DataContractDefinitionWidgetProps = {
 	definition: string;
@@ -7,7 +7,7 @@ export type DataContractDefinitionWidgetProps = {
 export const DataContractDefinitionWidget = ({
 	definition,
 }: DataContractDefinitionWidgetProps) => {
-	const htmlContent = renderDataContractHtml(definition);
+	const htmlContent = renderDataContract(definition);
 
 	// Note: dangerouslySetInnerHTML is required here to render the HTML output from our template engine.
 	// The renderDataContractHtml function properly escapes all user content to prevent XSS attacks.

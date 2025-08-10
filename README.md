@@ -23,6 +23,48 @@ The repository is a Yarn workspaces monorepo written in modern TypeScript.
 Run `yarn install` at the repository root to install all dependencies. Each
 package can be built using its `build` script.
 
+### Quick Start
+
+```bash
+# Install dependencies
+yarn install
+
+# Start both frontend and backend in development
+yarn start
+
+# Build all packages
+yarn build
+
+# Run tests
+yarn workspace @remunda/backstage-plugin-datacontract test
+yarn workspace @remunda/backstage-plugin-datacontract-backend test
+```
+
+### Release Management
+
+This repository uses **semantic-release** for automated versioning and publishing. All packages are released together with unified versioning. See [RELEASE.md](./RELEASE.md) for detailed information.
+
+```bash
+# Check current version (all packages use same version)
+echo $(node -p "require('./package.json').version")
+
+# Sync package versions manually if needed
+yarn version:sync
+
+# Test release process (dry run)
+yarn release:dry
+
+# Pack all packages for local testing
+yarn local-publish
+```
+
+**Commit Message Format:**
+- `feat:` → Minor release (1.0.0 → 1.1.0)
+- `fix:` → Patch release (1.0.0 → 1.0.1)  
+- `feat!:` or `BREAKING CHANGE:` → Major release (1.0.0 → 2.0.0)
+
+Releases are automatically triggered when changes are pushed to main, or can be manually triggered via GitHub Actions.
+
 ### Change Documentation
 
 Significant architectural changes should be documented in `AGENTS.md` so that

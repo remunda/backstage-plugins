@@ -1,7 +1,6 @@
 {
 	"name": "@remunda/backstage-plugins",
-	"private": true,
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"scripts": {
 		"start:be": "yarn workspace @remunda/backstage-plugin-datacontract-backend start",
 		"start:fe": "yarn workspace @remunda/backstage-plugin-datacontract start",
@@ -9,9 +8,12 @@
 		"build:fe": "yarn workspace @remunda/backstage-plugin-datacontract build",
 		"build": "yarn tsc && yarn build:be && yarn build:fe",
 		"start": "concurrently \"yarn start:be\" \"yarn start:fe\"",
-		"local-publish": "yarn build && yarn workspace @remunda/backstage-plugin-datacontract pack --out local-publish/datacontract-frontend.tgz && yarn workspace @remunda/backstage-plugin-datacontract-backend pack --out local-publish/datacontract-backend.tgz",
+		"local-publish": "yarn build && yarn workspaces foreach --no-private exec \"mkdir -p local-publish && npm pack --pack-destination=local-publish\"",
 		"precommit": "yarn biome check --fix && yarn biome lint --write && yarn biome format --fix && yarn tsc",
-		"prepare": "husky"
+		"prepare": "husky",
+		"release": "semantic-release",
+		"release:dry": "semantic-release --dry-run",
+		"version:sync": "node scripts/sync-versions.js"
 	},
 	"workspaces": [
 		"packages/*",
@@ -21,8 +23,14 @@
 	"devDependencies": {
 		"@backstage/cli": "^0.33.1",
 		"@biomejs/biome": "^2.1.2",
+		"@semantic-release/changelog": "^6.0.3",
+		"@semantic-release/git": "^10.0.1",
+		"@semantic-release/github": "^10.0.6",
+		"@semantic-release/npm": "^12.0.1",
 		"concurrently": "^9.2.0",
 		"husky": "^9.1.7",
+		"semantic-release": "^23.0.2",
+		"semantic-release-monorepo": "^8.0.2",
 		"typescript": "~5.8.0"
 	},
 	"resolutions": {

@@ -17,14 +17,15 @@
 	"sideEffects": false,
 	"scripts": {
 		"start": "backstage-cli package start",
-		"build": "yarn datacontract:update-templates && backstage-cli package build",
+		"build": "yarn datacontract:update-templates && backstage-cli package build && yarn datacontract:copy-templates",
 		"lint": "backstage-cli package lint",
 		"test": "backstage-cli package test",
 		"clean": "backstage-cli package clean",
 		"prepack": "backstage-cli package prepack",
 		"postpack": "backstage-cli package postpack",
 		"datacontract:update-templates": "node scripts/update-templates.js && yarn datacontract:precompile-templates",
-		"datacontract:precompile-templates": "yarn nunjucks-precompile templates > src/templates/templates.generated.js"
+		"datacontract:precompile-templates": "yarn nunjucks-precompile templates > src/templates/templates.generated.js",
+		"datacontract:copy-templates": "node -e \"const fs = require('fs'); const path = require('path'); fs.copyFileSync(path.join('src', 'templates', 'templates.generated.js'), path.join('dist', 'templates', 'templates.generated.js'));\""
 	},
 	"dependencies": {
 		"@backstage/core-components": "0.17.4",

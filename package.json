@@ -7,9 +7,9 @@
 		"start:fe": "yarn workspace @remunda/backstage-plugin-datacontract start",
 		"build:be": "yarn workspace @remunda/backstage-plugin-datacontract-backend build",
 		"build:fe": "yarn workspace @remunda/backstage-plugin-datacontract build",
-		"build": "yarn build:be && yarn build:fe",
+		"build": "yarn tsc && yarn build:be && yarn build:fe",
 		"start": "concurrently \"yarn start:be\" \"yarn start:fe\"",
-		"local-publish": "yarn tsc &&yarn build && yarn workspace @remunda/backstage-plugin-datacontract pack --out local-publish/datacontract-frontend.tgz && yarn workspace @remunda/backstage-plugin-datacontract-backend pack --out local-publish/datacontract-backend.tgz",
+		"local-publish": "yarn build && yarn workspace @remunda/backstage-plugin-datacontract pack --out local-publish/datacontract-frontend.tgz && yarn workspace @remunda/backstage-plugin-datacontract-backend pack --out local-publish/datacontract-backend.tgz",
 		"precommit": "yarn biome check --fix && yarn biome lint --write && yarn biome format --fix && yarn tsc",
 		"prepare": "husky"
 	},

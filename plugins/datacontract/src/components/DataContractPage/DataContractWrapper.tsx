@@ -1,10 +1,12 @@
-import type React from 'react';
-import { DataContractPage } from './DataContractPage';
+import type React from "react";
+import { DataContractPage } from "./DataContractPage";
 
 export interface DataContractWrapperProps {
-  definition: string;
+	definition: string;
 }
 
-export const DataContractWrapper: React.FC<DataContractWrapperProps> = ({ definition }) => {
-  return <DataContractPage definition={definition} />;
+export const DataContractWrapper: React.FC<DataContractWrapperProps> = ({
+	definition,
+}) => {
+	return <DataContractPage definition={definition} />;
 };

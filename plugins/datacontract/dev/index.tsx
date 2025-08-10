@@ -2,11 +2,15 @@ import type { ApiEntity } from "@backstage/catalog-model";
 import { createApiFactory } from "@backstage/core-plugin-api";
 import { createDevApp } from "@backstage/dev-utils";
 import {
-  type ApiDefinitionWidget,
-  apiDocsConfigRef,
-  defaultDefinitionWidgets,
+	type ApiDefinitionWidget,
+	apiDocsConfigRef,
+	defaultDefinitionWidgets,
 } from "@backstage/plugin-api-docs";
-import { DataContractPage, datacontractPlugin } from "../src/plugin";
+import {
+	DataContractDefinitionWidget,
+	DataContractPage,
+	datacontractPlugin,
+} from "../src/plugin";
 
 const sampleDataContract: string = `
 dataContractSpecification: 0.9.3
@@ -190,41 +194,46 @@ quality:
 `;
 
 createDevApp()
-  .registerPlugin(datacontractPlugin)
-  .addPage({
-    element: <DataContractPage definition={sampleDataContract} />,
-    title: "Root Page",
-    path: "/backstage-plugin-datacontract",
-  })
-  .registerApi(
-    createApiFactory({
-      api: apiDocsConfigRef,
-      deps: {},
-      factory: () => {
-        const definitionWidgets = defaultDefinitionWidgets();
+	.registerPlugin(datacontractPlugin)
+	.addPage({
+		element: <DataContractPage definition={sampleDataContract} />,
+		title: "Root Page",
+		path: "/backstage-plugin-datacontract",
+	})
+	.addPage({
+		element: <DataContractDefinitionWidget definition={sampleDataContract} />,
+		title: "Widget",
+		path: "/backstage-plugin-datacontract-widget",
+	})
+	.registerApi(
+		createApiFactory({
+			api: apiDocsConfigRef,
+			deps: {},
+			factory: () => {
+				const definitionWidgets = defaultDefinitionWidgets();
 
-        const factory = {
-          getApiDefinitionWidget: (apiEntity: ApiEntity) => {
-            if (apiEntity.spec.type === "datacontract") {
-              return {
-                type: "datacontract",
-                title: "DataContract",
-                rawLanguage: "yaml",
-                component: (definition: string) => (
-                  <div>
-                    <DataContractPage definition={definition} />
-                  </div>
-                ),
-              } as ApiDefinitionWidget;
-            }
-            // fallback to the defaults
-            return definitionWidgets.find(
-              (d) => d.type === apiEntity.spec.type
-            );
-          },
-        };
-        return factory;
-      },
-    })
-  )
-  .render();
+				const factory = {
+					getApiDefinitionWidget: (apiEntity: ApiEntity) => {
+						if (apiEntity.spec.type === "datacontract") {
+							return {
+								type: "datacontract",
+								title: "DataContract",
+								rawLanguage: "yaml",
+								component: (definition: string) => (
+									<div>
+										<DataContractPage definition={definition} />
+									</div>
+								),
+							} as ApiDefinitionWidget;
+						}
+						// fallback to the defaults
+						return definitionWidgets.find(
+							(d) => d.type === apiEntity.spec.type,
+						);
+					},
+				};
+				return factory;
+			},
+		}),
+	)
+	.render();

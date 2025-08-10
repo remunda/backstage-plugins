@@ -1,4 +1,6 @@
+import { useEffect, useRef } from "react";
 import { renderDataContract } from "../../templates/htmlRenderer";
+import { generateIframeHTML } from "./iframe-template";
 
 export type DataContractDefinitionWidgetProps = {
 	definition: string;
@@ -7,18 +9,33 @@ export type DataContractDefinitionWidgetProps = {
 export const DataContractDefinitionWidget = ({
 	definition,
 }: DataContractDefinitionWidgetProps) => {
-	const htmlContent = renderDataContract(definition);
+	const iframeRef = useRef<HTMLIFrameElement>(null);
 
-	// Note: dangerouslySetInnerHTML is required here to render the HTML output from our template engine.
-	// The renderDataContractHtml function properly escapes all user content to prevent XSS attacks.
+	useEffect(() => {
+		if (iframeRef.current) {
+			const htmlContent = renderDataContract(definition);
+			const fullHtmlContent = generateIframeHTML(htmlContent);
+
+			// Create a data URL to avoid CORS issues
+			const dataUrl = `data:text/html;charset=utf-8,${encodeURIComponent(fullHtmlContent)}`;
+			iframeRef.current.src = dataUrl;
+		}
+	}, [definition]);
+
 	return (
-		<div
-			// biome-ignore lint/security/noDangerouslySetInnerHtml: Required for template rendering with proper XSS protection
-			dangerouslySetInnerHTML={{ __html: htmlContent }}
-			style={{
-				// Add some basic styling to ensure TailwindCSS-like classes work
-				fontFamily: "system-ui, -apple-system, sans-serif",
-			}}
-		/>
+		<div style={{ width: "100%", height: "100vh", border: "none" }}>
+			<iframe
+				ref={iframeRef}
+				style={{
+					width: "100%",
+					height: "100%",
+					border: "none",
+					borderRadius: "8px",
+					boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+				}}
+				title="Data Contract Display"
+				sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
+			/>
+		</div>
 	);
 };

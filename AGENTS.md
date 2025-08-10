@@ -47,3 +47,5 @@ Use yarn for managing dependencies. Repository is monorepo, so also use related 
 Before each commit run `yarn precommit` to lint, fix and format all files with BiomeJS.
 
 For commits use conventional commits format
+
+Use playwright MCP for validation frontend implementation, start FE with `yarn start:fe`

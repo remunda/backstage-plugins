@@ -1,7 +1,7 @@
 //import type { ApiEntity } from "@backstage/catalog-model";
 import {
-	createPlugin,
-	createRoutableExtension,
+  createPlugin,
+  createRoutableExtension,
 } from "@backstage/core-plugin-api";
 // import type { ApiDefinitionWidget } from "@backstage/plugin-api-docs";
 // import React from "react";
@@ -32,19 +32,30 @@ import { rootRouteRef } from "./routes";
 // };
 
 export const datacontractPlugin = createPlugin({
-	id: "backstage-plugin-datacontract",
-	routes: {
-		root: rootRouteRef,
-	},
+  id: "backstage-plugin-datacontract",
+  routes: {
+    root: rootRouteRef,
+  },
 });
 
+export const DataContractDefinitionWidget = datacontractPlugin.provide(
+  createRoutableExtension({
+    name: "DataContractPage",
+    component: () =>
+      import("./components/DataContractDefinitionWidget").then(
+        (m) => m.DataContractDefinitionWidget
+      ),
+    mountPoint: rootRouteRef,
+  })
+);
+
 export const DataContractPage = datacontractPlugin.provide(
-	createRoutableExtension({
-		name: "DataContractPage",
-		component: () =>
-			import("./components/DataContractDefinitionWidget").then(
-				(m) => m.DataContractDefinitionWidget,
-			),
-		mountPoint: rootRouteRef,
-	}),
+  createRoutableExtension({
+    name: "DataContractPage",
+    component: () =>
+      import("./components/DataContractPage/DataContractPageWrapper").then(
+        (m) => m.DataContractPageWrapper
+      ),
+    mountPoint: rootRouteRef,
+  })
 );

@@ -10,7 +10,7 @@
 		"build": "yarn build:be && yarn build:fe",
 		"start": "concurrently \"yarn start:be\" \"yarn start:fe\"",
 		"local-publish": "yarn build && yarn workspace @remunda/backstage-plugin-datacontract pack --out local-publish/datacontract-frontend.tgz && yarn workspace @remunda/backstage-plugin-datacontract-backend pack --out local-publish/datacontract-backend.tgz",
-		"precommit": "yarn biome check --fix && yarn biome lint --write && yarn biome format --fix",
+		"precommit": "yarn biome check --fix && yarn biome lint --write && yarn biome format --fix && yarn tsc",
 		"prepare": "husky"
 	},
 	"workspaces": [

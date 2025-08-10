@@ -1,0 +1,25 @@
+<div class="mt-3 flow-root">
+  <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+    <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+      <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+
+        <table class="min-w-full divide-y divide-gray-300" id="/definitions/{{ definition_name }}">
+          <thead class="bg-gray-50">
+          <tr>
+            <th scope="colgroup" colspan="3" class="py-2 pl-4 pr-3 text-left font-semibold text-gray-900 sm:pl-6">
+              <span>{{ definition_name }}</span>
+              <div class="text-sm font-medium text-gray-500">{{ definition.description }}</div>
+            </th>
+          </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 bg-white">
+
+          {{ render_partial('partials/model_field.html', nested = false, field_name=definition_name,
+          field = definition, level = 0) }}
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

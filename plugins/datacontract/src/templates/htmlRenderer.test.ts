@@ -53,11 +53,11 @@ models:
 
 		it("does not return Backstage index.html and contains expected template markers", () => {
 			const html = renderDataContract(sampleYaml);
-			
+
 			// Should not return the SPA's index.html
 			expect(html).not.toMatch(/^<!DOCTYPE html>/);
 			expect(html).not.toContain("<html");
-			
+
 			// Should contain expected template content
 			expect(html).toContain("Orders Latest"); // The title from sample YAML
 			expect(html).toContain("urn:datacontract:checkout:orders-latest"); // The ID from sample YAML

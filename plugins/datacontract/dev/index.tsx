@@ -8,7 +8,6 @@ import {
 } from "@backstage/plugin-api-docs";
 import {
 	DataContractDefinitionWidget,
-	DataContractPage,
 	datacontractPlugin,
 } from "../src/plugin";
 
@@ -196,8 +195,8 @@ quality:
 createDevApp()
 	.registerPlugin(datacontractPlugin)
 	.addPage({
-		element: <DataContractPage definition={sampleDataContract} />,
-		title: "Root Page",
+		element: <DataContractDefinitionWidget definition={sampleDataContract} />,
+		title: "Widget Test",
 		path: "/backstage-plugin-datacontract",
 	})
 	.addPage({
@@ -221,7 +220,7 @@ createDevApp()
 								rawLanguage: "yaml",
 								component: (definition: string) => (
 									<div>
-										<DataContractPage definition={definition} />
+										<DataContractDefinitionWidget definition={definition} />
 									</div>
 								),
 							} as ApiDefinitionWidget;

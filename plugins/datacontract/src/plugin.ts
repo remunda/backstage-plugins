@@ -38,9 +38,9 @@ export const datacontractPlugin = createPlugin({
 	},
 });
 
-export const DataContractPage = datacontractPlugin.provide(
+export const DataContractDefinitionWidget = datacontractPlugin.provide(
 	createRoutableExtension({
-		name: "DataContractPage",
+		name: "DataContractDefinitionWidget",
 		component: () =>
 			import("./components/DataContractDefinitionWidget").then(
 				(m) => m.DataContractDefinitionWidget,

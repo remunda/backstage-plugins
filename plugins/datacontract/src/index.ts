@@ -1,5 +1,5 @@
 export {
-	DataContractPage,
+	DataContractDefinitionWidget,
 	datacontractPlugin,
 	//getApiDocsConfigFactory,
 } from "./plugin";

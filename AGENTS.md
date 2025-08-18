@@ -1,7 +1,6 @@
 # Instructions for Contributors
 
-This repository contains a Backstage plugin for ingesting and validating
-DataContract YAML files. Any significant architectural decision or change
+This repository contains several [Backstage](https://backstage.io/) plugins. Any significant architectural decision or change
 should be captured in the documentation. If you add new components or modify
 the ingest flow, update the relevant README or create additional docs as
 needed.
@@ -25,12 +24,12 @@ This practice ensures:
 - Historical context for future changes
 - Clear communication of what was accomplished
 
-Additional documentation for significant architectural changes should still be captured in the `docs/` directory or as separate documentation files. For example, see the files in `docs/` that document major design decisions and implementation details:
+Additional documentation for significant architectural changes should be captured as **Architecture Decision Records (ADRs)** in the `adr/` directory. See the [ADR README](./adr/README.md) for the format and existing decisions:
 
-- **Feature/Bug Description**: Clear title and description of what was implemented or fixed
-- **Acceptance Criteria**: Specific, testable requirements that define completion
-- **Validation**: Evidence that the change works as intended
-- **Traceability**: Clear documentation for future contributors and maintainers
+- **Context**: The situation and forces that led to the decision
+- **Decision**: The architectural decision that was made
+- **Consequences**: The positive and negative consequences
+- **Alternatives**: Other options considered and why they were rejected
 
 Example changeset creation:
 ```bash
@@ -38,12 +37,6 @@ yarn changeset
 # Follow prompts to select packages and change type
 # Write summary: "Add data visualization component to improve UX"
 ```
-
-## Recent Updates
-
-- Added `DataContractProcessor` which validates `$file` references in API entities and inserts the YAML during catalog ingestion.
-- Frontend plugin now registers a definition widget for APIs of type `datacontract`.
-
 ## Important
 
 Use yarn for managing dependencies. Repository is monorepo, so also use related workspace command.

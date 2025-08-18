@@ -2,6 +2,7 @@ node_modules
 .yarn/
 **/dist/
 local-publish/
+pack-publish/
 dist-types/
 coverage/
 .idea/

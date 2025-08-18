@@ -55,12 +55,12 @@ jobs:
         if: steps.changesets.outputs.published == 'true'
         run: |
           # Create artifacts for published packages
-          yarn workspaces foreach --no-private exec "mkdir -p local-publish && npm pack --pack-destination=local-publish"
+          yarn workspaces foreach --no-private exec "mkdir -p pack-publish && npm pack --pack-destination=pack-publish"
 
       - name: Archive packages
         if: steps.changesets.outputs.published == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: published-packages
-          path: plugins/*/local-publish/*.tgz
+          path: plugins/*/pack-publish/*.tgz
           retention-days: 30

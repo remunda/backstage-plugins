@@ -1,4 +1,4 @@
 {
-    "prettier.enable": false,
-    "editor.defaultFormatter": "biomejs.biome"
+	"prettier.enable": false,
+	"editor.defaultFormatter": "biomejs.biome"
 }

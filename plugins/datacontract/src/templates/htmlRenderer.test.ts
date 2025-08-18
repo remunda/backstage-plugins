@@ -64,9 +64,9 @@ models:
 			expect(html).toContain("Data Contract Specification"); // Template-specific content
 		});
 
-    it("throws error for invalid YAML", () => {
-      const invalidYaml = "invalid: yaml: content: [";
-      expect(() => renderDataContract(invalidYaml)).toThrow(expect.any(Error));
-    });
+		it("throws error for invalid YAML", () => {
+			const invalidYaml = "invalid: yaml: content: [";
+			expect(() => renderDataContract(invalidYaml)).toThrow(expect.any(Error));
+		});
 	});
 });

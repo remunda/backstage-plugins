@@ -62,7 +62,7 @@ jobs:
         if: steps.changesets.outputs.published == 'true'
         run: |
           # Create artifacts for published packages
-          yarn workspaces foreach --no-private exec "mkdir -p pack-publish && npm pack --pack-destination=pack-publish"
+          yarn workspaces foreach --all --no-private exec "mkdir -p pack-publish && npm pack --pack-destination=pack-publish"
 
       - name: Archive packages
         if: steps.changesets.outputs.published == 'true'

@@ -14,9 +14,9 @@ info:
     url: https://github.com/checkout-team
   status: active
 tags:
-  - orders
-  - ecommerce
-  - daily
+- orders
+- ecommerce
+- daily
 models:
   orders:
     type: table
@@ -26,41 +26,41 @@ models:
         type: string
         description: Primary key of the orders table
         required: true
-        primary: true
-        example: "O-123456"
+        primaryKey: true
+        examples: [ "O-123456" ]
         classification: public
       customer_id:
         type: string
         description: Unique identifier for the customer
         required: true
-        example: "C-789012"
+        examples: [ "C-789012" ]
         classification: internal
       customer_email:
         type: string
         description: Email address of the customer
         required: true
         format: email
-        example: "customer@example.com"
+        examples: [ "customer@example.com" ]
         classification: private
         pii: true
       order_total:
         type: number
         description: Total amount of the order in USD
         required: true
-        example: 99.99
+        examples: [ 99.99 ]
         classification: public
       order_status:
         type: string
         description: Current status of the order
         required: true
-        example: "delivered"
+        examples: [ "delivered" ]
         classification: public
       order_date:
         type: string
         description: Date when the order was placed
         required: true
         format: date
-        example: "2023-09-15"
+        examples: [ "2023-09-15" ]
         classification: public
       shipping_address:
         type: object
@@ -76,21 +76,21 @@ models:
         type: string
         description: Unique identifier for the customer
         required: true
-        primary: true
-        example: "C-789012"
+        primaryKey: true
+        examples: [ "C-789012" ]
         classification: internal
       first_name:
         type: string
         description: Customer's first name
         required: true
-        example: "Jane"
+        examples: [ "Jane" ]
         classification: private
         pii: true
       last_name:
         type: string
         description: Customer's last name
         required: true
-        example: "Smith"
+        examples: [ "Smith" ]
         classification: private
         pii: true
       email:
@@ -99,7 +99,7 @@ models:
         required: true
         format: email
         unique: true
-        example: "jane.smith@example.com"
+        examples: [ "jane.smith@example.com" ]
         classification: private
         pii: true
 servers:
@@ -139,7 +139,7 @@ servicelevels:
     timestampField: "order_date"
   frequency:
     description: How often data is updated
-    type: "scheduled"
+    type: "batch"
     interval: "daily"
     cron: "0 2 * * *"
   support:
@@ -147,42 +147,38 @@ servicelevels:
     time: "9 AM - 5 PM EST, Monday-Friday"
     responseTime: "24 hours for non-critical issues"
 examples:
-  - model: orders
-    type: csv
-    description: Sample order data
-    data: |
-      order_id,customer_id,order_total,order_status,order_date
-      O-123456,C-789012,99.99,delivered,2023-09-15
-      O-123457,C-789013,156.78,processing,2023-09-16
-      O-123458,C-789014,42.50,shipped,2023-09-16
+- model: orders
+  type: csv
+  description: Sample order data
+  data: |
+    order_id,customer_id,order_total,order_status,order_date
+    O-123456,C-789012,99.99,delivered,2023-09-15
+    O-123457,C-789013,156.78,processing,2023-09-16
+    O-123458,C-789014,42.50,shipped,2023-09-16
 definitions:
-  order_status:
-    domain: ecommerce
-    name: order_status
+  ecommerce/order_status:
     title: Order Status
     type: string
     description: Standardized order status values
     enum:
-      - pending
-      - processing
-      - shipped
-      - delivered
-      - cancelled
-      - refunded
-    example: delivered
+    - pending
+    - processing
+    - shipped
+    - delivered
+    - cancelled
+    - refunded
+    examples: [ delivered ]
     classification: public
-  customer_tier:
-    domain: ecommerce
-    name: customer_tier
+  ecommerce/customer_tier:
     title: Customer Tier
     type: string
     description: Customer loyalty tier
     enum:
-      - bronze
-      - silver
-      - gold
-      - platinum
-    example: gold
+    - bronze
+    - silver
+    - gold
+    - platinum
+    examples: [ gold ]
     classification: internal
 links:
   Documentation: https://docs.example.com/orders

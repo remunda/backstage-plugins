@@ -12,13 +12,14 @@
 		"build:fe": "yarn workspace @remunda/backstage-plugin-datacontract build",
 		"build": "yarn tsc && yarn build:be && yarn build:fe",
 		"start": "concurrently \"yarn start:be\" \"yarn start:fe\"",
-		"local-publish": "yarn build && yarn workspaces foreach --no-private exec \"mkdir -p local-publish && npm pack --pack-destination=local-publish\"",
-		"precommit": "yarn biome check --fix && yarn biome lint --write && yarn biome format --fix && yarn tsc",
+		"local-publish": "yarn build && yarn workspaces foreach --all --no-private exec \"rimraf local-publish && mkdir -p local-publish && npm pack --pack-destination=local-publish\"",
+		"precommit": "yarn biome check --fix && yarn biome lint --write && yarn biome format --fix && yarn tsc && yarn test",
 		"prepare": "husky",
 		"changeset": "changeset",
 		"changeset:version": "changeset version",
 		"changeset:publish": "changeset publish",
-		"release": "yarn build && yarn changeset:publish"
+		"release": "yarn build && yarn changeset:publish",
+		"test": "yarn workspaces foreach --all --no-private run test"
 	},
 	"workspaces": [
 		"packages/*",
@@ -32,6 +33,7 @@
 		"@changesets/cli": "^2.29.6",
 		"concurrently": "^9.2.0",
 		"husky": "^9.1.7",
+		"rimraf": "^6.0.1",
 		"typescript": "~5.8.0"
 	},
 	"resolutions": {

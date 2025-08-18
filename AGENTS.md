@@ -11,29 +11,32 @@ instructions and keep this file up to date when making large changes.
 
 ## Change Set Documentation
 
-All significant changes, features, and bug fixes should be documented as change sets in the `.changes/` directory. Each change set should follow the format demonstrated in `initial-design.md`:
+All significant changes, features, and bug fixes should be documented using **Changesets**. When making changes:
+
+1. **Create a changeset** using `yarn changeset`
+2. **Select affected packages** and specify the type of change (patch/minor/major)
+3. **Write a clear description** of what was implemented or fixed
+
+This practice ensures:
+- Proper semantic versioning of packages
+- Automatic changelog generation
+- Clear release management
+- Transparency in development decisions
+- Historical context for future changes
+- Clear communication of what was accomplished
+
+Additional documentation for significant architectural changes should still be captured in the `docs/` directory or as separate documentation files. For example, see the files in `docs/` that document major design decisions and implementation details:
 
 - **Feature/Bug Description**: Clear title and description of what was implemented or fixed
 - **Acceptance Criteria**: Specific, testable requirements that define completion
 - **Validation**: Evidence that the change works as intended
 - **Traceability**: Clear documentation for future contributors and maintainers
 
-This practice ensures:
-- Transparency in development decisions
-- Historical context for future changes
-- Clear communication of what was accomplished
-- Alignment with project goals and requirements
-
-Example change set structure:
-```
-# Feature: [Brief Title]
-## Description
-[Detailed explanation of the change]
-## Acceptance Criteria
-- [Specific requirement 1]
-- [Specific requirement 2]
-## Validation
-[How the change was tested/verified]
+Example changeset creation:
+```bash
+yarn changeset
+# Follow prompts to select packages and change type
+# Write summary: "Add data visualization component to improve UX"
 ```
 
 ## Recent Updates

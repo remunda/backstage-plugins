@@ -42,28 +42,38 @@ yarn workspace @remunda/backstage-plugin-datacontract-backend test
 
 ### Release Management
 
-This repository uses **semantic-release** for automated versioning and publishing. All packages are released together with unified versioning. See [RELEASE.md](./RELEASE.md) for detailed information.
+This repository uses **Changesets** for automated versioning and publishing. Each package can be versioned independently based on their individual changes. See [RELEASE.md](./RELEASE.md) for detailed information.
 
 ```bash
-# Check current version (all packages use same version)
-echo $(node -p "require('./package.json').version")
+# Check current version (packages can have different versions)
+yarn workspaces list --json
 
-# Sync package versions manually if needed
-yarn version:sync
+# Create a changeset for your changes
+yarn changeset
 
-# Test release process (dry run)
-yarn release:dry
+# Version packages based on changesets (updates package.json and CHANGELOG.md)
+yarn changeset:version
+
+# Publish packages to npm
+yarn changeset:publish
 
 # Pack all packages for local testing
 yarn local-publish
 ```
 
-**Commit Message Format:**
-- `feat:` → Minor release (1.0.0 → 1.1.0)
-- `fix:` → Patch release (1.0.0 → 1.0.1)  
-- `feat!:` or `BREAKING CHANGE:` → Major release (1.0.0 → 2.0.0)
+**Changeset Workflow:**
+1. Make your changes to the codebase
+2. Run `yarn changeset` to create a changeset describing your changes
+3. Commit both your changes and the changeset file
+4. When merged to main, GitHub Actions will automatically create a release PR
+5. Merge the release PR to publish the packages
 
-Releases are automatically triggered when changes are pushed to main, or can be manually triggered via GitHub Actions.
+**Change Types:**
+- `patch` → Bug fixes and small improvements (1.0.0 → 1.0.1)
+- `minor` → New features (1.0.0 → 1.1.0)  
+- `major` → Breaking changes (1.0.0 → 2.0.0)
+
+Releases are automatically managed through GitHub Actions when changesets are present, or can be manually triggered via the release workflow.
 
 ### Change Documentation
 
@@ -71,14 +81,12 @@ Significant architectural changes should be documented in `AGENTS.md` so that
 other contributors and AI assistants (OpenAI Codex, GitHub Copilot, Claude) can
 follow the decisions made.
 
-Additionally, all features and bug fixes should be documented as change sets in
-the `.changes/` directory. Each change set should include:
+Additionally, all features and bug fixes should be documented using **Changesets**. When making changes, create a changeset using `yarn changeset` which will:
 
-- Clear description of the feature or bug fix
-- Acceptance criteria defining what constitutes completion
-- Validation evidence showing the change works as intended
-- Context for future contributors and maintainers
+- Document the feature or bug fix clearly
+- Specify the semver impact (patch/minor/major)
+- Provide validation evidence showing the change works as intended
+- Ensure proper versioning and changelog generation
 
-See `.changes/initial-design.md` as an example of proper change set documentation.
 This practice ensures transparency, traceability, and clear communication of
-development progress.
+development progress through automated changelog generation.

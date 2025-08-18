@@ -1,75 +1,90 @@
 # Release Process
 
-This document describes the release process for the Backstage Data Contract plugins using semantic-release.
+This document describes the release process for the Backstage plugins using Changesets.
 
 ## Overview
 
-This monorepo uses **semantic-release** to automatically version and publish all npm packages with the same version. All packages in the workspace are released together with unified versioning.
+This monorepo uses **Changesets** to manage versioning and publishing of npm packages. Each package can be versioned independently based on their individual changes, allowing for more flexible release management.
 
 **Key Features:**
-- ✅ Single version for all packages
-- ✅ Automatic semantic versioning based on commit messages
-- ✅ Unified git tag (e.g., `v1.2.3`)
-- ✅ Automatic changelog generation
+- ✅ Independent versioning for each package
+- ✅ Explicit change documentation via changeset files
+- ✅ Automatic changelog generation per package
 - ✅ NPM publishing with provenance
-- ✅ Universal approach for adding more plugins
+- ✅ GitHub integration for release PR management
+- ✅ Simple addition of new plugins
 
 ## Automated Releases
 
-### Commit Message Format
+### Changeset Workflow
 
-Use [Conventional Commits](https://conventionalcommits.org/) format:
+1. **Make your changes** to the codebase
+2. **Create a changeset** using `yarn changeset`
+3. **Commit your changes** along with the changeset file
+4. **Push to main branch** or create a PR
+5. **Changesets Action** automatically creates a release PR
+6. **Merge the release PR** to publish packages
 
-```
-type(scope): description
+### Creating Changesets
 
-[optional body]
+When you make changes that should trigger a release, create a changeset:
 
-[optional footer(s)]
-```
-
-**Version Impact:**
-- `fix:` → Patch release (1.0.0 → 1.0.1)
-- `feat:` → Minor release (1.0.0 → 1.1.0)
-- `BREAKING CHANGE:` or `!` → Major release (1.0.0 → 2.0.0)
-
-**Examples:**
 ```bash
-feat: add new data visualization component
-fix: resolve issue with YAML parsing
-feat!: change API interface (breaking change)
+yarn changeset
+```
+
+This will prompt you to:
+1. **Select packages** affected by your changes
+2. **Choose semver bump type** (patch/minor/major) for each package
+3. **Write a summary** of the changes
+
+**Change Types:**
+- `patch` → Bug fixes and small improvements (1.0.0 → 1.0.1)
+- `minor` → New features and additions (1.0.0 → 1.1.0)
+- `major` → Breaking changes (1.0.0 → 2.0.0)
+
+### Example Changeset
+
+A changeset file looks like this:
+```markdown
+---
+"@remunda/backstage-plugin-datacontract": minor
+"@remunda/backstage-plugin-datacontract-backend": patch
+---
+
+Add new data visualization component
+
+This adds support for rendering charts in the DataContract widget, 
+improving the user experience when viewing data quality metrics.
 ```
 
 ### Release Process
 
-1. **Commit with conventional format** to main branch
-2. **Semantic-release analyzes** commit messages since last release
-3. **Version is determined** automatically (patch/minor/major)
-4. **Changelog is generated** from commit messages
-5. **Git tag is created** (e.g., `v1.2.3`)
-6. **All workspace packages** are updated to the same version
-7. **Packages are built** and published to npm
-8. **GitHub release** is created with changelog
+1. **Changesets are merged** to main branch
+2. **GitHub Action** detects changeset files
+3. **Release PR is created** with version bumps and changelog updates
+4. **Review and merge** the release PR
+5. **Packages are automatically published** to npm
+6. **GitHub releases** are created with changelogs
 
-### Manual Release
+### Manual Release Trigger
 
-You can trigger a release manually via GitHub Actions:
+You can trigger releases manually via GitHub Actions:
 1. Go to **Actions** tab in GitHub
-2. Select **"Release"** workflow
+2. Select **"Release with Changesets"** workflow
 3. Click **"Run workflow"**
-4. The workflow will process commits and release if needed
 
 ## Package Versioning
 
-All packages share the same version:
-- `@remunda/backstage-plugin-datacontract`
-- `@remunda/backstage-plugin-datacontract-backend`
+Packages can have independent versions:
+- `@remunda/backstage-plugin-datacontract` (e.g., v2.1.0)
+- `@remunda/backstage-plugin-datacontract-backend` (e.g., v1.3.2)
 
-**Git Tags:** Single tag format `v1.2.3` (no package prefixes)
+**Git Tags:** Separate tags per package (e.g., `@remunda/backstage-plugin-datacontract@2.1.0`)
 
 ## Adding New Plugins
 
-The release system is universal. To add a new plugin:
+The release system automatically includes new plugins:
 
 1. **Create plugin** in `plugins/` directory
 2. **Add to workspace** (already configured with `plugins/*`)
@@ -83,7 +98,8 @@ The release system is universal. To add a new plugin:
      }
    }
    ```
-4. **Plugin is automatically included** in next release
+4. **Create changeset** when ready to release
+5. **Plugin is included** in release process
 
 ## Setup Requirements
 
@@ -102,14 +118,17 @@ Ensure GitHub Actions have:
 ## Local Development
 
 ```bash
-# Check current version
-echo $(node -p "require('./package.json').version")
+# Check current versions
+yarn workspaces list --json
 
-# Sync all package versions manually
-yarn version:sync
+# Create a changeset
+yarn changeset
 
-# Dry run semantic-release
-yarn release:dry
+# Version packages based on changesets (updates package.json and CHANGELOG.md)
+yarn changeset:version
+
+# Publish packages (usually done by CI)
+yarn changeset:publish
 
 # Pack all packages for testing
 yarn local-publish
@@ -117,31 +136,50 @@ yarn local-publish
 
 ## Configuration Files
 
-- **`.releaserc.json`** - Semantic-release configuration
-- **`scripts/sync-versions.js`** - Version synchronization script
-- **`CHANGELOG.md`** - Main project changelog
-- **`.github/workflows/release.yml`** - Release workflow
+- **`.changeset/config.json`** - Changesets configuration
+- **`.changeset/*.md`** - Individual changeset files
+- **`CHANGELOG.md`** - Per-package changelogs
+- **`.github/workflows/release-changesets.yml`** - Release workflow
 
-## Rollback
+## Release States
+
+### Pre-release Workflow
+For alpha/beta releases:
+```bash
+# Enter pre-release mode
+yarn changeset pre enter alpha
+
+# Create changesets as normal
+yarn changeset
+
+# Version and publish pre-releases
+yarn changeset:version
+yarn changeset:publish
+
+# Exit pre-release mode when ready
+yarn changeset pre exit
+```
+
+### Rollback
 
 To rollback a release:
 1. **Unpublish** packages from npm (within 72 hours)
-2. **Delete git tag**: `git tag -d v1.2.3 && git push --delete origin v1.2.3`
-3. **Delete GitHub release**
-4. **Revert commits** if necessary
+2. **Revert the release commit**
+3. **Create a new changeset** with a patch to fix issues
 
 ## Troubleshooting
 
-### No Release Created
-- Check commit messages follow conventional format
-- Ensure commits contain releasable changes (feat/fix/BREAKING CHANGE)
-- Run `yarn release:dry` to test locally
+### No Release PR Created
+- Ensure changeset files exist in `.changeset/` directory
+- Check that changesets reference existing packages
+- Verify GitHub Action has proper permissions
 
 ### Failed NPM Publish
 - Verify NPM_TOKEN is valid and has publish permissions
 - Check package versions don't already exist on npm
 - Ensure all `publishConfig` sections are correct
 
-### Version Sync Issues
-- Run `yarn version:sync` to manually synchronize versions
-- Check all package.json files for consistency
+### Changeset Not Detected
+- Confirm changeset file follows proper format
+- Check that package names in changeset match actual package names
+- Ensure changeset has been committed to repository

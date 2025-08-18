@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.0.0
+
+### Major Changes
+
+- Migration from semantic-release to changesets
+
+  This is the first major release of the Backstage DataContract plugins. The release process has been migrated from semantic-release to changesets for better monorepo support and more predictable versioning.
+
+  Features included in this release:
+
+  - Frontend plugin for displaying DataContract definitions in the Backstage catalog
+  - Backend plugin for processing and validating DataContract API entities
+  - Widget for rendering DataContract YAML files with rich HTML formatting
+  - Support for DataContract schema validation
+
 All notable changes to the Backstage Data Contract frontend plugin will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
@@ -8,15 +23,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 ### Changed
+
 ### Deprecated
+
 ### Removed
+
 ### Fixed
+
 ### Security
 
 ## [0.1.0] - 2025-01-XX
 
 ### Added
+
 - Initial release of the Data Contract frontend plugin
 - Data Contract page with model visualization
 - Entity relationship diagrams using Mermaid

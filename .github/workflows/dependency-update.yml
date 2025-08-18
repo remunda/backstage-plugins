@@ -1,0 +1,58 @@
+name: Dependency Update
+
+on:
+
+  workflow_dispatch:
+
+
+jobs:
+  update-dependencies:
+    name: Update Dependencies
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v5
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: yarn
+
+    - name: Install dependencies
+      run: yarn install --immutable
+
+    - name: Update dependencies
+      run: |
+        yarn up '*'
+        yarn dedupe
+
+    - name: Check for changes
+      id: changes
+      run: |
+        if git diff --quiet; then
+          echo "changed=false" >> $GITHUB_OUTPUT
+        else
+          echo "changed=true" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Create Pull Request
+      if: steps.changes.outputs.changed == 'true'
+      uses: peter-evans/create-pull-request@v6
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: 'chore: update dependencies'
+        title: 'chore: update dependencies'
+        body: |
+          This PR updates all dependencies to their latest versions.
+
+          ## Changes
+          - Updated all dependencies using `yarn up '*'`
+          - Ran `yarn dedupe` to remove duplicate dependencies
+
+          Please review the changes and ensure all tests pass before merging.
+        branch: deps/update-dependencies
+        delete-branch: true

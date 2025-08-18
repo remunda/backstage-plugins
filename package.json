@@ -1,7 +1,10 @@
 {
 	"name": "@remunda/backstage-plugins",
-	"private": true,
-	"version": "0.0.1",
+	"version": "0.1.0",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/remunda/backstage-plugins.git"
+	},
 	"scripts": {
 		"start:be": "yarn workspace @remunda/backstage-plugin-datacontract-backend start",
 		"start:fe": "yarn workspace @remunda/backstage-plugin-datacontract start",
@@ -9,9 +12,13 @@
 		"build:fe": "yarn workspace @remunda/backstage-plugin-datacontract build",
 		"build": "yarn tsc && yarn build:be && yarn build:fe",
 		"start": "concurrently \"yarn start:be\" \"yarn start:fe\"",
-		"local-publish": "yarn build && yarn workspace @remunda/backstage-plugin-datacontract pack --out local-publish/datacontract-frontend.tgz && yarn workspace @remunda/backstage-plugin-datacontract-backend pack --out local-publish/datacontract-backend.tgz",
+		"local-publish": "yarn build && yarn workspaces foreach --no-private exec \"mkdir -p local-publish && npm pack --pack-destination=local-publish\"",
 		"precommit": "yarn biome check --fix && yarn biome lint --write && yarn biome format --fix && yarn tsc",
-		"prepare": "husky"
+		"prepare": "husky",
+		"changeset": "changeset",
+		"changeset:version": "changeset version",
+		"changeset:publish": "changeset publish",
+		"release": "yarn build && yarn changeset:publish"
 	},
 	"workspaces": [
 		"packages/*",
@@ -21,6 +28,8 @@
 	"devDependencies": {
 		"@backstage/cli": "^0.33.1",
 		"@biomejs/biome": "^2.1.2",
+		"@changesets/changelog-github": "^0.5.1",
+		"@changesets/cli": "^2.29.6",
 		"concurrently": "^9.2.0",
 		"husky": "^9.1.7",
 		"typescript": "~5.8.0"

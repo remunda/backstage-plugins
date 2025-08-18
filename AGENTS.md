@@ -1,7 +1,6 @@
 # Instructions for Contributors
 
-This repository contains a Backstage plugin for ingesting and validating
-DataContract YAML files. Any significant architectural decision or change
+This repository contains several [Backstage](https://backstage.io/) plugins. Any significant architectural decision or change
 should be captured in the documentation. If you add new components or modify
 the ingest flow, update the relevant README or create additional docs as
 needed.
@@ -11,36 +10,33 @@ instructions and keep this file up to date when making large changes.
 
 ## Change Set Documentation
 
-All significant changes, features, and bug fixes should be documented as change sets in the `.changes/` directory. Each change set should follow the format demonstrated in `initial-design.md`:
+All significant changes, features, and bug fixes should be documented using **Changesets**. When making changes:
 
-- **Feature/Bug Description**: Clear title and description of what was implemented or fixed
-- **Acceptance Criteria**: Specific, testable requirements that define completion
-- **Validation**: Evidence that the change works as intended
-- **Traceability**: Clear documentation for future contributors and maintainers
+1. **Create a changeset** using `yarn changeset`
+2. **Select affected packages** and specify the type of change (patch/minor/major)
+3. **Write a clear description** of what was implemented or fixed
 
 This practice ensures:
+- Proper semantic versioning of packages
+- Automatic changelog generation
+- Clear release management
 - Transparency in development decisions
 - Historical context for future changes
 - Clear communication of what was accomplished
-- Alignment with project goals and requirements
 
-Example change set structure:
+Additional documentation for significant architectural changes should be captured as **Architecture Decision Records (ADRs)** in the `adr/` directory. See the [ADR README](./adr/README.md) for the format and existing decisions:
+
+- **Context**: The situation and forces that led to the decision
+- **Decision**: The architectural decision that was made
+- **Consequences**: The positive and negative consequences
+- **Alternatives**: Other options considered and why they were rejected
+
+Example changeset creation:
+```bash
+yarn changeset
+# Follow prompts to select packages and change type
+# Write summary: "Add data visualization component to improve UX"
 ```
-# Feature: [Brief Title]
-## Description
-[Detailed explanation of the change]
-## Acceptance Criteria
-- [Specific requirement 1]
-- [Specific requirement 2]
-## Validation
-[How the change was tested/verified]
-```
-
-## Recent Updates
-
-- Added `DataContractProcessor` which validates `$file` references in API entities and inserts the YAML during catalog ingestion.
-- Frontend plugin now registers a definition widget for APIs of type `datacontract`.
-
 ## Important
 
 Use yarn for managing dependencies. Repository is monorepo, so also use related workspace command.

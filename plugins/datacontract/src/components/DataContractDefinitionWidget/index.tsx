@@ -17,7 +17,9 @@ export const DataContractDefinitionWidget = ({
 			const fullHtmlContent = generateIframeHTML(htmlContent);
 
 			// Create a data URL to avoid CORS issues
-			const dataUrl = `data:text/html;charset=utf-8,${encodeURIComponent(fullHtmlContent)}`;
+			const dataUrl = `data:text/html;charset=utf-8,${encodeURIComponent(
+				fullHtmlContent,
+			)}`;
 			iframeRef.current.src = dataUrl;
 		}
 	}, [definition]);
@@ -33,6 +35,7 @@ export const DataContractDefinitionWidget = ({
 				}}
 				title="Data Contract Display"
 				sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
+				role="presentation"
 			/>
 		</div>
 	);

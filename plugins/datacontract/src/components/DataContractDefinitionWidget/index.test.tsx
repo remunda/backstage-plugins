@@ -26,11 +26,15 @@ describe("DataContractDefinitionWidget", () => {
 	it("renders main HTML structure", () => {
 		render(<DataContractDefinitionWidget definition={sampleYaml} />);
 
-		// Basic layout present
-		expect(screen.getByText("Data Contract")).toBeInTheDocument();
-		expect(screen.getByText("Data Model")).toBeInTheDocument();
+		// Check that an iframe is rendered (since the component renders HTML in an iframe)
+		const iframe = screen.getByRole("presentation", { hidden: true });
+		expect(iframe).toBeInTheDocument();
+		expect(iframe).toHaveAttribute(
+			"sandbox",
+			"allow-scripts allow-popups allow-popups-to-escape-sandbox",
+		);
 
-		// Should not render raw YAML
+		// Should not render raw YAML in the main document
 		expect(
 			screen.queryByText("dataContractSpecification: 0.9.2"),
 		).not.toBeInTheDocument();
@@ -38,8 +42,15 @@ describe("DataContractDefinitionWidget", () => {
 
 	it("throws on invalid YAML", () => {
 		const invalidYaml = "invalid: yaml: content: [";
+		// Suppress console.error for this test
+		const consoleSpy = jest
+			.spyOn(console, "error")
+			.mockImplementation(() => {});
+
 		expect(() =>
 			render(<DataContractDefinitionWidget definition={invalidYaml} />),
 		).toThrow();
+
+		consoleSpy.mockRestore();
 	});
 });

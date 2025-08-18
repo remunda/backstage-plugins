@@ -66,7 +66,7 @@ models:
 
 		it("throws error for invalid YAML", () => {
 			const invalidYaml = "invalid: yaml: content: [";
-			expect(() => renderDataContract(invalidYaml)).toThrow();
+			expect(() => renderDataContract(invalidYaml)).toThrow(expect.any(Error));
 		});
 	});
 });

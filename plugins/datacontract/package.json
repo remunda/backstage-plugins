@@ -1,7 +1,12 @@
 {
 	"name": "@remunda/backstage-plugin-datacontract",
+	"version": "0.0.0",
 	"main": "src/index.ts",
 	"types": "src/index.ts",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/remunda/backstage-plugins.git"
+	},
 	"publishConfig": {
 		"access": "public",
 		"main": "dist/index.esm.js",
@@ -19,7 +24,8 @@
 		"start": "backstage-cli package start",
 		"build": "yarn datacontract:update-templates && backstage-cli package build && yarn datacontract:copy-templates",
 		"lint": "backstage-cli package lint",
-		"test": "backstage-cli package test",
+		"test": "backstage-cli package test --watch=false",
+		"test:watch": "backstage-cli package test --watch",
 		"clean": "backstage-cli package clean",
 		"prepack": "backstage-cli package prepack",
 		"postpack": "backstage-cli package postpack",

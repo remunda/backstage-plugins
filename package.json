@@ -1,6 +1,10 @@
 {
 	"name": "@remunda/backstage-plugins",
 	"version": "0.1.0",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/remunda/backstage-plugins.git"
+	},
 	"scripts": {
 		"start:be": "yarn workspace @remunda/backstage-plugin-datacontract-backend start",
 		"start:fe": "yarn workspace @remunda/backstage-plugin-datacontract start",

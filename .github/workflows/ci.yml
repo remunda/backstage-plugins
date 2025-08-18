@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Enable Corepack
         run: corepack enable
@@ -30,17 +30,11 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
+      - name: Biome CI
+        run: yarn biome ci
+
       - name: Type check
         run: yarn tsc
-
-      - name: Biome check
-        run: yarn biome check
-
-      - name: Biome lint
-        run: yarn biome lint
-
-      - name: Validate changeset status
-        run: yarn changeset status --verbose
 
   test:
     name: Test

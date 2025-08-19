@@ -1,5 +1,12 @@
 # @remunda/backstage-plugin-datacontract
 
+## 0.1.1
+
+### Patch Changes
+
+- d01e074: Fixed CI publishing packages into Github Artifacts
+  Added readme for users of the plugin, how to install and incorporate into their instance of backstage
+
 ## 0.1.0
 
 ### Minor Changes

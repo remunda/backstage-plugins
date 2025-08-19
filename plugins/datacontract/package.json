@@ -1,6 +1,6 @@
 {
 	"name": "@remunda/backstage-plugin-datacontract",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Backstage frontend plugin to render and manage DataContract API entities.",
 	"main": "src/index.ts",
 	"types": "src/index.ts",

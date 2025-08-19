@@ -1,5 +1,5 @@
 app:
-  title: Data Contract Plugion
+  title: Data Contract Plugin
   description: A plugin to manage data contracts in Backstage.
 
 backend:

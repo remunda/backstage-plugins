@@ -4,29 +4,29 @@
 Accepted
 
 ## Context
-We needed to create a Backstage plugin for managing and visualizing DataContract YAML files. The challenge was to integrate DataContract specifications into the existing Backstage ecosystem in a way that feels native and provides value to teams managing data contracts.
+We needed to create a Backstage plugin for managing and visualizing Data Contract YAML files. The challenge was to integrate Data Contract specifications into the existing Backstage ecosystem in a way that feels native and provides value to teams managing data contracts.
 
 ## Decision
 We decided to implement a dual-plugin architecture:
 
 1. **Backend Plugin** (`@remunda/backstage-plugin-datacontract-backend`)
    - Custom catalog processor for resolving `$file:` references in API entities
-   - Validation against the official DataContract specification
+  - Validation against the official Data Contract specification
    - Injection of raw YAML into entity metadata
    - REST endpoints for DataContract validation
 
 2. **Frontend Plugin** (`@remunda/backstage-plugin-datacontract`)
-   - Extension of the API Docs definition widget
-   - Rich visualization of DataContract content
+  - Extension of the API Docs definition widget
+  - Rich visualization of Data Contract content
    - Integration with Backstage's entity system
 
 ## Architecture
 
 ### Entity Integration
-- API entities reference DataContract files using `$file:` in `spec.definition`
+- API entities reference Data Contract files using `$file:` in `spec.definition`
 - Plugin recognizes entities where `spec.type` is set to `datacontract`
 - Backend processor resolves file references and validates content
-- Frontend renders DataContract content when appropriate entity type is detected
+- Frontend renders Data Contract content when appropriate entity type is detected
 
 ### Plugin Structure
 ```
@@ -48,7 +48,7 @@ plugins/
 ## Consequences
 
 ### Positive
-- **Native Integration**: DataContracts appear as first-class entities in Backstage
+- **Native Integration**: Data Contracts appear as first-class entities in Backstage
 - **Validation**: Automatic validation against official specification
 - **Traceability**: Direct linking between services and their data contracts
 - **Extensibility**: Architecture supports future enhancements and integrations
@@ -57,7 +57,7 @@ plugins/
 ### Negative
 - **Complexity**: Dual-plugin architecture requires coordination between frontend and backend
 - **Dependency**: Requires both plugins to be installed for full functionality
-- **Learning Curve**: Developers need to understand Backstage entity system and DataContract specification
+- **Learning Curve**: Developers need to understand Backstage entity system and Data Contract specification
 
 ## Alternatives Considered
 

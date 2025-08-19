@@ -25,3 +25,8 @@ Templates are processed to convert Python syntax to JavaScript:
 - `partials/` - Partial templates referenced by main template
 
 Source: https://github.com/datacontract/datacontract-cli/tree/main/datacontract/templates
+
+## License and attribution
+
+- The datacontract-cli repository is licensed under the MIT License. See its LICENSE: https://github.com/datacontract/datacontract-cli/blob/main/LICENSE
+- These templates are downloaded and lightly transformed; the original MIT terms apply to the source templates. See the root `THIRD_PARTY_NOTICES.md` for details.

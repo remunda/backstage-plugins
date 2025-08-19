@@ -4,7 +4,7 @@
 Accepted
 
 ## Context
-The plugin needed to render DataContract YAML content in a rich, formatted view within Backstage. The challenge was to provide a clean, professional presentation while avoiding CSS conflicts with the parent Backstage application. Initial attempts with inline rendering caused styling conflicts and inconsistent presentation.
+The plugin needed to render Data Contract YAML content in a rich, formatted view within Backstage. The challenge was to provide a clean, professional presentation while avoiding CSS conflicts with the parent Backstage application. Initial attempts with inline rendering caused styling conflicts and inconsistent presentation.
 
 ## Decision
 We decided to implement an iframe-based rendering system that provides complete CSS isolation while maintaining security and performance.
@@ -15,7 +15,7 @@ We decided to implement an iframe-based rendering system that provides complete 
 1. **DataContractDefinitionWidget** - Main React component managing iframe lifecycle
 2. **iframe-template.ts** - HTML document generator for iframe content
 3. **iframe-styles.ts** - CSS content exported as TypeScript string constant
-4. **htmlRenderer.ts** - Template engine for DataContract content generation
+4. **htmlRenderer.ts** - Template engine for Data Contract content generation
 
 ### Implementation Approach
 ```typescript
@@ -53,7 +53,7 @@ const DataContractDefinitionWidget = () => {
 ### CSS Isolation Strategy
 - **Complete Iframe Sandboxing**: Prevents any CSS bleeding between parent and child contexts
 - **TailwindCSS via CDN**: Loaded within iframe for complete design system access
-- **Custom CSS Overrides**: DataContract-specific styling without affecting parent application
+- **Custom CSS Overrides**: Data Contract-specific styling without affecting parent application
 - **Element Hiding**: CSS rules to hide unwanted UI elements (Show YAML button, Entity Relationship Diagram)
 
 ### Security Model
@@ -72,7 +72,7 @@ const DataContractDefinitionWidget = () => {
 
 ### Positive
 - **Complete CSS Isolation**: No styling conflicts with Backstage application
-- **Professional Presentation**: Consistent, clean rendering of DataContract content
+- **Professional Presentation**: Consistent, clean rendering of Data Contract content
 - **Security**: Sandboxed execution prevents security vulnerabilities
 - **Maintainability**: Template changes isolated from parent application
 - **Performance**: Efficient rendering with minimal overhead
@@ -88,7 +88,7 @@ const DataContractDefinitionWidget = () => {
 
 1. **Inline Rendering with CSS Modules**
    - Rejected: CSS conflicts with Backstage's Material-UI styling
-   - Issue: Global CSS rules affecting DataContract presentation
+    - Issue: Global CSS rules affecting Data Contract presentation
 
 2. **Shadow DOM**
    - Rejected: Limited browser support and complexity with React integration

@@ -1,8 +1,8 @@
-# DataContract Backstage Plugin
+# Data Contract API Plugin (frontend)
 
-A Backstage plugin for managing and visualizing [DataContract](https://datacontract.com/) specifications within your service catalog. This plugin enables teams to document, validate, and share data contracts as API entities in Backstage.
+A Backstage plugin for managing and visualizing [Data Contract](https://datacontract.com/) specifications within your service catalog. This plugin enables teams to document, validate, and share data contracts as API entities in Backstage.
 
-## What is a DataContract?
+## What is a Data Contract?
 
 DataContracts are specifications that define the structure, format, and semantics of data interfaces between services. They help teams:
 
@@ -12,13 +12,13 @@ DataContracts are specifications that define the structure, format, and semantic
 - Establish data governance policies
 - Enable data product management
 
-This plugin integrates DataContract specifications into Backstage as API entities, providing a unified view of your data landscape alongside your services and components.
+This plugin integrates Data Contract specifications into Backstage as API entities, providing a unified view of your data landscape alongside your services and components.
 
 ## Features
 
-- **API Entity Integration**: Register DataContract specifications as API entities with `type: datacontract`
-- **Schema Validation**: Automatic validation against the official [DataContract specification](https://github.com/datacontract/datacontract-specification)
-- **Rich Visualization**: Custom widget for rendering DataContract details in a user-friendly format
+- **API Entity Integration**: Register Data Contract specifications as API entities with `type: datacontract`
+- **Schema Validation**: Automatic validation against the official [Data Contract specification](https://github.com/datacontract/datacontract-specification)
+- **Rich Visualization**: Custom widget for rendering Data Contract details in a user-friendly format
 - **File Reference Support**: Load DataContract definitions from external files using `$file:` references
 - **Catalog Integration**: Full integration with Backstage's catalog system and entity model
 
@@ -28,7 +28,7 @@ This plugin integrates DataContract specifications into Backstage as API entitie
 
 ### API Entity Structure
 
-DataContracts are represented as Backstage API entities with the following structure:
+Data Contracts are represented as Backstage API entities with the following structure:
 
 ```yaml
 apiVersion: backstage.io/v1alpha1
@@ -94,7 +94,7 @@ spec:
 
 ### File References
 
-You can also reference external DataContract files:
+You can also reference external Data Contract files:
 
 ```yaml
 apiVersion: backstage.io/v1alpha1
@@ -147,7 +147,7 @@ const app = createApp({
 });
 ```
 
-### Backend Plugin Installation
+### Backend Plugin Installation (companion module)
 
 1. **Install the backend plugin:**
 
@@ -250,17 +250,17 @@ Once registered, DataContract entities will appear in your Backstage catalog:
 
 ### Example DataContract Entity
 
-See the included [sample-datacontract.yaml](./sample-datacontract.yaml) for a complete example with all supported DataContract features.
+See the included [sample-datacontract.yaml](./sample-datacontract.yaml) for a complete example with all supported Data Contract features.
 
 ## Configuration
 
 ### API Docs Integration
 
-The plugin automatically extends Backstage's API documentation system. When viewing an API entity with `spec.type: datacontract`, the DataContract widget will be displayed instead of the default API documentation.
+The plugin automatically extends Backstage's API documentation system. When viewing an API entity with `spec.type: datacontract`, the Data Contract widget will be displayed instead of the default API documentation.
 
 ### Validation
 
-The backend processor automatically validates all DataContract specifications against the official schema. Validation errors will appear in the Backstage catalog and prevent invalid entities from being processed.
+The backend processor automatically validates all Data Contract specifications against the official schema. Validation errors will appear in the Backstage catalog and prevent invalid entities from being processed.
 
 ## Development
 

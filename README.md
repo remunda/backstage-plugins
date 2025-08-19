@@ -1,98 +1,37 @@
 # Backstage Plugins
 
-This monorepo contains a Backstage plugins.
+This monorepo is host multiple open-source Backstage plugins.
 
-## Datacontract plugin
+## Data Contract Plugin
 
-This plugin is for ingesting and validating
-[DataContract](https://datacontract.com/) YAML files. The plugin was scaffolded
-with the Backstage CLI and split into backend and frontend packages managed with
-Yarn workspaces.
+See [Data Contract Plugin Docs](./plugins/datacontract/README.md)
 
-### Features
+The first published plugin is the **Data Contract API Definition**, featuring a frontend package for rendering Data Contracts and a backend module that validates API entities with `spec.type: datacontract`.
 
-- API entities can reference a `datacontract.yaml` using `$file:` in the
-  `spec.definition` field.
-- A custom catalog processor resolves the file reference, validates it against
-  the official [DataContract specification](https://github.com/datacontract/datacontract-specification),
-  and injects the raw YAML into the entity.
-- The frontend plugin extends the API Docs definition widget to render
-  DataContract content when `spec.type` is `datacontract`.
-- Example backend router at `/ingest` that validates uploaded YAML.
+This plugin streamlines data contract sharing and bridges the gap between data providers and consumers. Built on top of the official [Data Contract specification](https://datacontract.com/) and its ecosystem of tools, it brings enterprise-grade data governance directly into your Backstage catalog.
 
-The repository is a Yarn workspaces monorepo written in modern TypeScript.
+**Why Data Contracts?** They establish clear agreements between data producers and consumers, ensuring data quality, compatibility, and trust across your organization's data landscape.
 
 ## Development
 
-Run `yarn install` at the repository root to install all dependencies. Each
-package can be built using its `build` script.
+For setup, local development, build, and test scripts, see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
-### Quick Start
+## Releases
 
-```bash
-# Install dependencies
-yarn install
+Release and versioning are managed with Changesets. See [RELEASE.md](./RELEASE.md) for the full workflow.
 
-# Start both frontend and backend in development
-yarn start
-
-# Build all packages
-yarn build
-
-# Run tests
-yarn workspace @remunda/backstage-plugin-datacontract test
-yarn workspace @remunda/backstage-plugin-datacontract-backend test
-```
-
-### Release Management
-
-This repository uses **Changesets** for automated versioning and publishing. Each package can be versioned independently based on their individual changes. See [RELEASE.md](./RELEASE.md) for detailed information.
-
-```bash
-# Check current version (packages can have different versions)
-yarn workspaces list --json
-
-# Create a changeset for your changes
-yarn changeset
-
-# Version packages based on changesets (updates package.json and CHANGELOG.md)
-yarn changeset:version
-
-# Publish packages to npm
-yarn changeset:publish
-
-# Pack all packages for local testing
-yarn local-publish
-```
-
-**Changeset Workflow:**
-
-1. Make your changes to the codebase
-2. Run `yarn changeset` to create a changeset describing your changes
-3. Commit both your changes and the changeset file
-4. When merged to main, GitHub Actions will automatically create a release PR
-5. Merge the release PR to publish the packages
-
-**Change Types:**
-
-- `patch` → Bug fixes and small improvements (1.0.0 → 1.0.1)
-- `minor` → New features (1.0.0 → 1.1.0)
-- `major` → Breaking changes (1.0.0 → 2.0.0)
-
-Releases are automatically managed through GitHub Actions when changesets are present, or can be manually triggered via the release workflow.
-
-### Architecture Documentation
+## Architecture Documentation
 
 Significant architectural decisions are documented as **Architecture Decision Records (ADRs)** in the `adr/` directory. See [ADR README](./adr/README.md) for the format and existing decisions.
 
-### Change Documentation
+## Packages
 
-All features and bug fixes should be documented using **Changesets**. When making changes, create a changeset using `yarn changeset` which will:
+- Data Contract API Plugin (frontend): `plugins/datacontract` — see its
+  [README](./plugins/datacontract/README.md) for installation and usage.
+- Data Contract API Plugin (backend): `plugins/datacontract-backend` — see its
+  [README](./plugins/datacontract-backend/README.md) for installation and usage.
+- Additional plugins will be added under `plugins/*` as they are developed.
 
-- Document the feature or bug fix clearly
-- Specify the semver impact (patch/minor/major)
-- Provide validation evidence showing the change works as intended
-- Ensure proper versioning and changelog generation
+## Contributing
 
-This practice ensures transparency, traceability, and clear communication of
-development progress through automated changelog generation.
+See [CONTRIBUTING.md](./CONTRIBUTING.md).

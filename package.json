@@ -1,10 +1,17 @@
 {
 	"name": "@remunda/backstage-plugins",
 	"version": "0.1.0",
+	"private": true,
+	"description": "Mono-repo for Backstage DataContract plugins (frontend and backend).",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/remunda/backstage-plugins.git"
 	},
+	"license": "Apache-2.0",
+	"bugs": {
+		"url": "https://github.com/remunda/backstage-plugins/issues"
+	},
+	"homepage": "https://github.com/remunda/backstage-plugins",
 	"scripts": {
 		"start:be": "yarn workspace @remunda/backstage-plugin-datacontract-backend start",
 		"start:fe": "yarn workspace @remunda/backstage-plugin-datacontract start",
@@ -22,7 +29,6 @@
 		"test": "yarn workspaces foreach --all --no-private run test"
 	},
 	"workspaces": [
-		"packages/*",
 		"plugins/*"
 	],
 	"packageManager": "yarn@4.9.2",

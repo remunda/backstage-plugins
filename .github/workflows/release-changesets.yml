@@ -1,8 +1,11 @@
 name: Release with Changesets
 
 on:
-  push:
+  workflow_run:
+    workflows: ["CI"]
     branches: [main]
+    types: 
+      - completed
   workflow_dispatch:
 
 concurrency:
@@ -14,7 +17,7 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     environment:
-      name: npm-registry
+      name: "npm-registry"
       url: "https://www.npmjs.com/package/@remunda"
     permissions:
       contents: write

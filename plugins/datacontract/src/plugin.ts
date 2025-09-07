@@ -10,7 +10,8 @@ import {
 	type ApiDefinitionWidget,
 	apiDocsConfigRef,
 } from "@backstage/plugin-api-docs";
-import React from "react";
+import React, { type JSXElementConstructor } from "react";
+import type { DataContractDefinitionWidgetProps } from "./components/DataContractDefinitionWidget";
 import { rootRouteRef } from "./routes";
 
 export const withDatacontractApiDocsConfigFactory = (
@@ -26,10 +27,11 @@ export const withDatacontractApiDocsConfigFactory = (
 						type: "datacontract",
 						title: "DataContract",
 						rawLanguage: "yaml",
-						component: (definition: string) =>
-							React.createElement(DataContractDefinitionWidget, {
-								definition,
-							}),
+						component: (definition: string): JSX.Element =>
+							React.createElement(
+								DataContractDefinitionWidget as JSXElementConstructor<DataContractDefinitionWidgetProps>,
+								{ definition },
+							),
 					};
 				}
 				// fallback to the defaults

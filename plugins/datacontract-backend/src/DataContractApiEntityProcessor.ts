@@ -59,6 +59,19 @@ ajv.addFormat("uri", {
 
 const validate = ajv.compile(dcSchema);
 
+enum ValidationErrorType {
+	INVALID_YAML = 'INVALID_YAML',
+	MISSING_DATA_CONTRACT_SPEC = 'MISSING_DATA_CONTRACT_SPEC',
+	INVALID_DATA_CONTRACT_FIELDS = 'INVALID_DATA_CONTRACT_FIELDS'
+}
+
+interface ValidationResult {
+	isValid: boolean;
+	errorType?: ValidationErrorType;
+	errorMessage?: string;
+	shouldFailIngestion: boolean;
+}
+
 /**
  * Catalog processor that loads datacontract definitions from $file references
  * in API entities with type `datacontract`.
@@ -87,25 +100,19 @@ export class DataContractProcessor implements CatalogProcessor {
 			`Validating DataContract for entity ${entity.metadata.name}`,
 		);
 
-		try {
-			const definition = this.getDefinitionYaml(entity);
-			if (definition) {
-				const valid = validate(definition);
-				if (!valid) {
-					const errors = validate.errors || [];
-					const validationMessages = errors
-						.map((error) => `${error.instancePath || "root"}: ${error.message}`)
-						.join("; ");
-					throw new Error(
-						`DataContract validation failed: ${validationMessages}`,
-					);
-				}
-			}
-		} catch (error) {
-			if (error instanceof Error) {
-				throw error;
-			}
-			throw new Error(`DataContract validation failed: ${String(error)}`);
+		const validationResult = this.validateDataContract(entity);
+		
+		if (!validationResult.isValid && validationResult.shouldFailIngestion) {
+			this.logger.error(
+				`DataContract validation failed for entity ${entity.metadata.name}: ${validationResult.errorMessage}`,
+			);
+			throw new Error(validationResult.errorMessage);
+		}
+
+		if (!validationResult.isValid) {
+			this.logger.warn(
+				`DataContract validation warnings for entity ${entity.metadata.name}: ${validationResult.errorMessage}`,
+			);
 		}
 
 		return true;
@@ -114,15 +121,69 @@ export class DataContractProcessor implements CatalogProcessor {
 	private getDefinitionYaml(entity: Entity): unknown {
 		const definition = entity.spec?.definition;
 		if (definition && typeof definition === "string") {
-			const parsed = yaml.load(definition);
-			if (typeof parsed !== "object" || parsed === null) {
+			try {
+				const parsed = yaml.load(definition);
+				if (typeof parsed !== "object" || parsed === null) {
+					throw new Error(
+						`Invalid DataContract definition for entity ${entity.metadata.name}: not a valid YAML object`,
+					);
+				}
+				return parsed;
+			} catch (error) {
 				throw new Error(
 					`Invalid DataContract definition for entity ${entity.metadata.name}: not a valid YAML object`,
 				);
 			}
-			return parsed;
 		}
 		return undefined;
+	}
+
+	private validateDataContract(entity: Entity): ValidationResult {
+		try {
+			const definition = this.getDefinitionYaml(entity);
+			if (!definition) {
+				return { isValid: true, shouldFailIngestion: false };
+			}
+
+			// Check if it's missing the dataContractSpecification field (case 2)
+			if (typeof definition === 'object' && definition !== null) {
+				const defObj = definition as Record<string, unknown>;
+				if (!('dataContractSpecification' in defObj)) {
+					return {
+						isValid: false,
+						errorType: ValidationErrorType.MISSING_DATA_CONTRACT_SPEC,
+						errorMessage: `Entity ${entity.metadata.name} is missing required 'dataContractSpecification' field`,
+						shouldFailIngestion: true
+					};
+				}
+			}
+
+			// Run full schema validation
+			const valid = validate(definition);
+			if (!valid) {
+				const errors = validate.errors || [];
+				const validationMessages = errors
+					.map((error) => `${error.instancePath || "root"}: ${error.message}`)
+					.join("; ");
+
+				return {
+					isValid: false,
+					errorType: ValidationErrorType.INVALID_DATA_CONTRACT_FIELDS,
+					errorMessage: `DataContract validation failed: ${validationMessages}`,
+					shouldFailIngestion: false // Don't fail ingestion for field validation errors
+				};
+			}
+
+			return { isValid: true, shouldFailIngestion: false };
+		} catch (error) {
+			// Case 1: Invalid YAML
+			return {
+				isValid: false,
+				errorType: ValidationErrorType.INVALID_YAML,
+				errorMessage: error instanceof Error ? error.message : String(error),
+				shouldFailIngestion: true
+			};
+		}
 	}
 
 	postProcessEntity?(
@@ -136,47 +197,42 @@ export class DataContractProcessor implements CatalogProcessor {
 			return Promise.resolve(entity);
 		}
 
-		try {
-			const definition = this.getDefinitionYaml(entity);
-			if (definition) {
-				const valid = validate(definition);
-				this.logger.info(
-					`Validating DataContract for entity ${entity.metadata.name}: ${valid}`,
+		const validationResult = this.validateDataContract(entity);
+
+		if (!validationResult.isValid) {
+			if (validationResult.shouldFailIngestion) {
+				// Cases 1 & 2: Emit processing error for invalid YAML or missing dataContractSpecification
+				this.logger.error(
+					`Error processing DataContract for entity ${entity.metadata.name}: ${validationResult.errorMessage}`,
 				);
-
-				if (!valid) {
-					const errors = validate.errors || [];
-					const validationMessages = errors
-						.map((error) => `${error.instancePath || "root"}: ${error.message}`)
-						.join("; ");
-
-					this.logger.warn(
-						`DataContract validation failed for entity ${entity.metadata.name}: ${validationMessages}`,
-					);
-
-					// Emit validation errors so they appear in the Backstage UI
-					emit(
-						processingResult.generalError(
-							location,
-							`DataContract validation failed: ${validationMessages}`,
-						),
-					);
+				
+				emit(
+					processingResult.generalError(
+						location,
+						validationResult.errorMessage!,
+					),
+				);
+			} else {
+				// Case 3: For invalid fields, log warning but don't emit error (will be shown in frontend)
+				this.logger.warn(
+					`DataContract validation warnings for entity ${entity.metadata.name}: ${validationResult.errorMessage}`,
+				);
+				
+				// Store validation errors in entity annotations for frontend access
+				if (!entity.metadata.annotations) {
+					entity.metadata.annotations = {};
 				}
+				entity.metadata.annotations['datacontract.io/validation-errors'] = validationResult.errorMessage!;
 			}
-		} catch (error) {
-			this.logger.error(
-				`Error processing DataContract for entity ${entity.metadata.name}: ${error}`,
+		} else {
+			this.logger.info(
+				`DataContract validation successful for entity ${entity.metadata.name}`,
 			);
-
-			// Emit processing error
-			emit(
-				processingResult.generalError(
-					location,
-					`DataContract processing error: ${
-						error instanceof Error ? error.message : String(error)
-					}`,
-				),
-			);
+			
+			// Clear any existing validation errors if validation passes
+			if (entity.metadata.annotations && entity.metadata.annotations['datacontract.io/validation-errors']) {
+				delete entity.metadata.annotations['datacontract.io/validation-errors'];
+			}
 		}
 
 		return Promise.resolve(entity);

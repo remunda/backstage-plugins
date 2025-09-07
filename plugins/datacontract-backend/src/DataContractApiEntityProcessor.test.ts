@@ -13,6 +13,7 @@ describe("DataContractProcessor", () => {
 
 	beforeEach(() => {
 		processor = new DataContractProcessor(mockLogger);
+		jest.clearAllMocks();
 	});
 
 	describe("getProcessorName", () => {
@@ -53,6 +54,70 @@ describe("DataContractProcessor", () => {
 			expect(result).toBe(true);
 		});
 
+		it("should throw error for invalid YAML", async () => {
+			const entity: Entity = {
+				apiVersion: "backstage.io/v1alpha1",
+				kind: "API",
+				metadata: { name: "test-api" },
+				spec: {
+					type: "datacontract",
+					definition: `invalid: yaml: content: [`,
+				},
+			};
+
+			await expect(processor.validateEntityKind?.(entity)).rejects.toThrow(
+				"Invalid DataContract definition for entity test-api: not a valid YAML object",
+			);
+		});
+
+		it("should throw error for missing dataContractSpecification", async () => {
+			const entity: Entity = {
+				apiVersion: "backstage.io/v1alpha1",
+				kind: "API",
+				metadata: { name: "test-api" },
+				spec: {
+					type: "datacontract",
+					definition: `
+            id: test-contract
+            info:
+              title: Test Data Contract
+              version: "1.0.0"
+          `,
+				},
+			};
+
+			await expect(processor.validateEntityKind?.(entity)).rejects.toThrow(
+				"Entity test-api is missing required 'dataContractSpecification' field",
+			);
+		});
+
+		it("should NOT throw error for invalid datacontract fields but warn", async () => {
+			const entity: Entity = {
+				apiVersion: "backstage.io/v1alpha1",
+				kind: "API",
+				metadata: { name: "test-api" },
+				spec: {
+					type: "datacontract",
+					definition: `
+            dataContractSpecification: "0.9.0"
+            id: test-contract
+            info:
+              title: Test Data Contract
+              # Missing required version field
+          `,
+				},
+			};
+
+			// Should not throw but should return true (allows ingestion)
+			const result = await processor.validateEntityKind?.(entity);
+			expect(result).toBe(true);
+			
+			// Should have logged a warning
+			expect(mockLogger.warn).toHaveBeenCalledWith(
+				expect.stringContaining("DataContract validation warnings for entity test-api"),
+			);
+		});
+
 		it("should return false for non-API entities", async () => {
 			const entity: Entity = {
 				apiVersion: "backstage.io/v1alpha1",
@@ -80,26 +145,6 @@ describe("DataContractProcessor", () => {
 			expect(result).toBe(false);
 		});
 
-		it("should throw error for invalid datacontract definition", async () => {
-			const entity: Entity = {
-				apiVersion: "backstage.io/v1alpha1",
-				kind: "API",
-				metadata: { name: "test-api" },
-				spec: {
-					type: "datacontract",
-					definition: `
-            openapi: 3.0.0
-            info:
-              title: Invalid API
-              # Missing required version field
-          `,
-				},
-			};
-
-			await expect(processor.validateEntityKind?.(entity)).rejects.toThrow(
-				"DataContract validation failed",
-			);
-		});
 
 		it("should handle undefined definition gracefully", async () => {
 			const entity: Entity = {
@@ -225,6 +270,96 @@ describe("DataContractProcessor", () => {
 				const result = await processor.validateEntityKind?.(entity);
 				expect(result).toBe(true);
 			}
+		});
+	});
+
+	describe("postProcessEntity", () => {
+		const mockLocation = { type: "url", target: "http://example.com" };
+		const mockEmit = jest.fn();
+		const mockCache = {} as any;
+
+		beforeEach(() => {
+			jest.clearAllMocks();
+		});
+
+		it("should store validation errors in annotations for invalid fields", async () => {
+			const entity: Entity = {
+				apiVersion: "backstage.io/v1alpha1",
+				kind: "API",
+				metadata: { name: "test-api" },
+				spec: {
+					type: "datacontract",
+					definition: `
+            dataContractSpecification: "0.9.0"
+            id: test-contract
+            info:
+              title: Test Data Contract
+              # Missing required version field
+          `,
+				},
+			};
+
+			const result = await processor.postProcessEntity?.(entity, mockLocation, mockEmit, mockCache);
+			
+			expect(result).toBeDefined();
+			expect(result!.metadata.annotations).toBeDefined();
+			expect(result!.metadata.annotations!['datacontract.io/validation-errors']).toContain("DataContract validation failed");
+			expect(mockEmit).not.toHaveBeenCalled(); // Should not emit errors for field validation
+		});
+
+		it("should emit error for missing dataContractSpecification", async () => {
+			const entity: Entity = {
+				apiVersion: "backstage.io/v1alpha1",
+				kind: "API",
+				metadata: { name: "test-api" },
+				spec: {
+					type: "datacontract",
+					definition: `
+            id: test-contract
+            info:
+              title: Test Data Contract
+              version: "1.0.0"
+          `,
+				},
+			};
+
+			await processor.postProcessEntity?.(entity, mockLocation, mockEmit, mockCache);
+			
+			expect(mockEmit).toHaveBeenCalledWith(
+				expect.objectContaining({
+					type: "error",
+					error: expect.objectContaining({
+						message: "Entity test-api is missing required 'dataContractSpecification' field"
+					})
+				})
+			);
+		});
+
+		it("should clear validation errors annotation for valid data contracts", async () => {
+			const entity: Entity = {
+				apiVersion: "backstage.io/v1alpha1",
+				kind: "API",
+				metadata: { 
+					name: "test-api",
+					annotations: {
+						'datacontract.io/validation-errors': 'Previous error'
+					}
+				},
+				spec: {
+					type: "datacontract",
+					definition: `
+            dataContractSpecification: "0.9.0"
+            id: test-contract
+            info:
+              title: Test Data Contract
+              version: "1.0.0"
+          `,
+				},
+			};
+
+			const result = await processor.postProcessEntity?.(entity, mockLocation, mockEmit, mockCache);
+			
+			expect(result!.metadata.annotations!['datacontract.io/validation-errors']).toBeUndefined();
 		});
 	});
 });

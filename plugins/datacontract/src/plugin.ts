@@ -29,6 +29,7 @@ export const withDatacontractApiDocsConfigFactory = (
 						component: (definition: string) =>
 							React.createElement(DataContractDefinitionWidget, {
 								definition,
+								apiEntity,
 							}),
 					};
 				}
